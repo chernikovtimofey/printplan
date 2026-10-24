@@ -1,0 +1,277 @@
+{
+ "version": 1,
+ "reviewed": false,
+ "notes": "Task–Material–Process graph for Stereotech Hybrid 530 V5.2. Edge weights and numeric attributes are a draft: Stereotech profile descriptions (resources/materials/*.xml.fdm_material) plus typical datasheet values for the polymer family. Density comes from the slicer profiles and is reliable; everything else needs a manual review (python -m printplan kg-report).",
+
+ "properties": {
+  "strength":        {"label": "прочность"},
+  "stiffness":       {"label": "жёсткость (модуль упругости)"},
+  "toughness":       {"label": "ударная вязкость, отсутствие хрупкого разрушения"},
+  "fatigue":         {"label": "стойкость к циклическим нагрузкам"},
+  "creep":           {"label": "стойкость к ползучести"},
+  "wear":            {"label": "износостойкость"},
+  "low_friction":    {"label": "низкий коэффициент трения"},
+  "high_friction":   {"label": "высокий коэффициент трения (сцепление)"},
+  "heat":            {"label": "теплостойкость"},
+  "uv":              {"label": "стойкость к УФ"},
+  "moisture":        {"label": "стойкость к влаге, низкое водопоглощение"},
+  "chem_acid_salt":  {"label": "стойкость к кислотам и солям"},
+  "chem_alkali":     {"label": "стойкость к щелочам"},
+  "chem_oil_fuel":   {"label": "масло- и бензостойкость"},
+  "chem_alcohol":    {"label": "стойкость к спиртам и растворителям"},
+  "chem_glycol":     {"label": "стойкость к гликолю (тосол, антифриз)"},
+  "ozone":           {"label": "озоностойкость"},
+  "food_safe":       {"label": "допуск к контакту с пищей"},
+  "esd":             {"label": "антистатические свойства"},
+  "dielectric":      {"label": "диэлектрик, без токопроводящих наполнителей"},
+  "surface_finish":  {"label": "качество поверхности"},
+  "accuracy":        {"label": "точность размеров, низкая усадка"},
+  "flexibility":     {"label": "гибкость, эластичность"},
+  "layer_adhesion":  {"label": "межслойная адгезия"},
+  "lightweight":     {"label": "малая плотность"},
+  "gentle_on_mating":{"label": "не изнашивает ответную деталь (без абразивного наполнителя)"}
+ },
+
+ "applications": {
+  "bracket_load":   {"label": "кронштейн, держатель под нагрузкой"},
+  "housing":        {"label": "корпус"},
+  "decorative":     {"label": "декоративная деталь"},
+  "prototype":      {"label": "макет, прототип"},
+  "fit_mating":     {"label": "посадочная деталь"},
+  "gear":           {"label": "шестерня, зубчатая передача"},
+  "sliding_wear":   {"label": "деталь скольжения: втулка, копир, направляющая"},
+  "roller_wheel":   {"label": "колесо, ролик"},
+  "seal_flexible":  {"label": "уплотнение, пыльник, прокладка"},
+  "impeller_fan":   {"label": "крыльчатка, рабочее колесо насоса"},
+  "shaft_axle":     {"label": "вал, ось"},
+  "automotive":     {"label": "автомобильная деталь"},
+  "chemical_env":   {"label": "деталь для агрессивной среды"},
+  "food_contact":   {"label": "деталь, контактирующая с пищей"},
+  "outdoor":        {"label": "уличная деталь"}
+ },
+
+ "flags": {
+  "appearance":   {"label": "внешний вид, качество поверхности", "properties": {"surface_finish": 1.0, "accuracy": 0.3}},
+  "fit":          {"label": "посадка, точность размеров", "properties": {"accuracy": 1.0, "stiffness": 0.3}},
+  "load":         {"label": "нагрузка, прочность", "properties": {"strength": 1.0, "stiffness": 0.5, "layer_adhesion": 0.5}},
+  "fatigue":      {"label": "циклические нагрузки", "properties": {"fatigue": 1.0, "toughness": 0.4}},
+  "impact":       {"label": "удары, нехрупкость", "properties": {"toughness": 1.0}},
+  "torsion":      {"label": "кручение: вал или ось скручивается моментом вдоль своей длины (не вращение детали и не передача момента зубьями)", "properties": {"strength": 0.7, "stiffness": 0.5, "layer_adhesion": 0.6}},
+  "creep":        {"label": "ползучесть под нагрузкой", "properties": {"creep": 1.0, "stiffness": 0.4}},
+  "heat":         {"label": "нагрев", "properties": {"heat": 1.0}},
+  "flexible":     {"label": "гибкость, эластичность", "properties": {"flexibility": 1.0}},
+  "rigid":        {"label": "жёсткость, деталь не должна быть мягкой", "properties": {"stiffness": 1.0}},
+  "outdoor_uv":   {"label": "улица, УФ", "properties": {"uv": 1.0}},
+  "moisture":     {"label": "влага, гидрофобность", "properties": {"moisture": 1.0}},
+  "chem_acid_salt": {"label": "кислоты, соли, реагенты", "properties": {"chem_acid_salt": 1.0}},
+  "chem_alkali":  {"label": "щёлочи", "properties": {"chem_alkali": 1.0}},
+  "chem_oil_fuel":{"label": "масла, топливо, СОЖ", "properties": {"chem_oil_fuel": 1.0}},
+  "chem_alcohol": {"label": "спирты, растворители", "properties": {"chem_alcohol": 1.0}},
+  "chem_glycol":  {"label": "гликоль, тосол", "properties": {"chem_glycol": 1.0}},
+  "ozone":        {"label": "озон", "properties": {"ozone": 1.0}},
+  "wear":         {"label": "износ, абразив", "properties": {"wear": 1.0}},
+  "low_friction": {"label": "низкое трение, скольжение", "properties": {"low_friction": 1.0, "wear": 0.4}},
+  "high_friction":{"label": "сцепление, высокое трение", "properties": {"high_friction": 1.0}},
+  "food_contact": {"label": "контакт с пищей, нетоксичность", "properties": {"food_safe": 1.0}},
+  "esd":          {"label": "антистатика", "properties": {"esd": 1.0}},
+  "dielectric":   {"label": "диэлектрик, без токопроводящих наполнителей", "properties": {"dielectric": 1.0}},
+  "mating_gentle":{"label": "не изнашивать ответную деталь", "properties": {"gentle_on_mating": 1.0}},
+  "lightweight":  {"label": "ограничение массы/плотности", "properties": {"lightweight": 1.0}},
+  "sealing":      {"label": "герметичность", "properties": {"flexibility": 0.3, "accuracy": 0.3}},
+  "speed":        {"label": "быстро, черновик", "properties": {}}
+ },
+
+ "materials": {
+  "proto_pla": {
+   "label": "Proto PLA", "family": "PLA", "line": "Proto",
+   "attributes": {"service_temp_c": 50, "softening_temp_c": 58, "modulus_mpa": 3000, "tensile_mpa": 50, "elongation_pct": 4, "water_absorption_pct": 0.3, "filler": "none", "conductive": false, "flexible": false, "shore": "D80"},
+   "properties": {"strength": 0.5, "stiffness": 0.7, "toughness": 0.2, "fatigue": 0.2, "creep": 0.3, "wear": 0.3, "low_friction": 0.3, "high_friction": 0.2, "heat": 0.1, "uv": 0.3, "moisture": 0.5, "chem_acid_salt": 0.4, "chem_alkali": 0.2, "chem_oil_fuel": 0.4, "chem_alcohol": 0.3, "chem_glycol": 0.2, "ozone": 0.5, "food_safe": 0.3, "esd": 0.0, "dielectric": 0.9, "surface_finish": 0.9, "accuracy": 0.9, "flexibility": 0.0, "layer_adhesion": 0.7, "lightweight": 0.5, "gentle_on_mating": 0.8},
+   "applications": {"decorative": 1.0, "prototype": 1.0, "fit_mating": 0.5, "housing": 0.3},
+   "difficulty": 0.0, "difficulty_reasons": [],
+   "mode_5d": "ok"
+  },
+  "enduse_petg": {
+   "label": "Enduse PETG", "family": "PETG", "line": "Enduse",
+   "attributes": {"service_temp_c": 65, "softening_temp_c": 80, "modulus_mpa": 2000, "tensile_mpa": 50, "elongation_pct": 20, "water_absorption_pct": 0.2, "filler": "none", "conductive": false, "flexible": false, "shore": "D75"},
+   "properties": {"strength": 0.6, "stiffness": 0.5, "toughness": 0.7, "fatigue": 0.5, "creep": 0.4, "wear": 0.4, "low_friction": 0.3, "high_friction": 0.3, "heat": 0.4, "uv": 0.6, "moisture": 0.8, "chem_acid_salt": 0.7, "chem_alkali": 0.5, "chem_oil_fuel": 0.6, "chem_alcohol": 0.5, "chem_glycol": 0.6, "ozone": 0.6, "food_safe": 0.4, "esd": 0.0, "dielectric": 0.9, "surface_finish": 0.8, "accuracy": 0.8, "flexibility": 0.1, "layer_adhesion": 0.9, "lightweight": 0.3, "gentle_on_mating": 0.8},
+   "applications": {"housing": 0.7, "bracket_load": 0.7, "decorative": 0.6, "fit_mating": 0.6, "outdoor": 0.6, "prototype": 0.5},
+   "difficulty": 0.03, "difficulty_reasons": ["склонность к нитеобразованию"],
+   "mode_5d": "ok"
+  },
+  "enduse_abs": {
+   "label": "Enduse ABS", "family": "ABS", "line": "Enduse",
+   "attributes": {"service_temp_c": 85, "softening_temp_c": 100, "modulus_mpa": 2200, "tensile_mpa": 40, "elongation_pct": 10, "water_absorption_pct": 0.3, "filler": "none", "conductive": false, "flexible": false, "shore": "D75"},
+   "properties": {"strength": 0.55, "stiffness": 0.55, "toughness": 0.7, "fatigue": 0.5, "creep": 0.5, "wear": 0.4, "low_friction": 0.3, "high_friction": 0.3, "heat": 0.65, "uv": 0.1, "moisture": 0.5, "chem_acid_salt": 0.7, "chem_alkali": 0.7, "chem_oil_fuel": 0.5, "chem_alcohol": 0.3, "chem_glycol": 0.6, "ozone": 0.4, "food_safe": 0.1, "esd": 0.0, "dielectric": 0.9, "surface_finish": 0.7, "accuracy": 0.6, "flexibility": 0.05, "layer_adhesion": 0.6, "lightweight": 0.8, "gentle_on_mating": 0.8},
+   "applications": {"housing": 0.8, "bracket_load": 0.6, "decorative": 0.4, "automotive": 0.4},
+   "difficulty": 0.12, "difficulty_reasons": ["коробление, нужна закрытая камера"],
+   "mode_5d": "ok"
+  },
+  "enduse_pc": {
+   "label": "Enduse PC", "family": "PC", "line": "Enduse",
+   "attributes": {"service_temp_c": 115, "softening_temp_c": 145, "modulus_mpa": 2300, "tensile_mpa": 60, "elongation_pct": 50, "water_absorption_pct": 0.15, "filler": "none", "conductive": false, "flexible": false, "shore": "D80"},
+   "properties": {"strength": 0.8, "stiffness": 0.65, "toughness": 0.9, "fatigue": 0.5, "creep": 0.7, "wear": 0.45, "low_friction": 0.3, "high_friction": 0.3, "heat": 0.85, "uv": 0.4, "moisture": 0.6, "chem_acid_salt": 0.6, "chem_alkali": 0.1, "chem_oil_fuel": 0.5, "chem_alcohol": 0.2, "chem_glycol": 0.4, "ozone": 0.6, "food_safe": 0.3, "esd": 0.0, "dielectric": 0.9, "surface_finish": 0.7, "accuracy": 0.6, "flexibility": 0.05, "layer_adhesion": 0.6, "lightweight": 0.5, "gentle_on_mating": 0.8},
+   "applications": {"housing": 0.8, "automotive": 0.8, "bracket_load": 0.7, "impeller_fan": 0.5},
+   "difficulty": 0.2, "difficulty_reasons": ["высокая температура печати", "коробление", "гигроскопичен, нужна сушка"],
+   "mode_5d": "ok"
+  },
+  "enduse_pa6": {
+   "label": "Enduse PA6", "family": "PA6", "line": "Enduse",
+   "attributes": {"service_temp_c": 100, "softening_temp_c": 180, "modulus_mpa": 1800, "tensile_mpa": 60, "elongation_pct": 50, "water_absorption_pct": 1.5, "filler": "none", "conductive": false, "flexible": false, "shore": "D75"},
+   "properties": {"strength": 0.75, "stiffness": 0.45, "toughness": 0.9, "fatigue": 0.8, "creep": 0.5, "wear": 0.9, "low_friction": 0.85, "high_friction": 0.2, "heat": 0.65, "uv": 0.4, "moisture": 0.15, "chem_acid_salt": 0.3, "chem_alkali": 0.75, "chem_oil_fuel": 0.95, "chem_alcohol": 0.6, "chem_glycol": 0.6, "ozone": 0.7, "food_safe": 0.6, "esd": 0.0, "dielectric": 0.8, "surface_finish": 0.6, "accuracy": 0.5, "flexibility": 0.15, "layer_adhesion": 0.7, "lightweight": 0.7, "gentle_on_mating": 0.9},
+   "applications": {"sliding_wear": 1.0, "gear": 0.8, "shaft_axle": 0.7, "impeller_fan": 0.6, "fit_mating": 0.6, "roller_wheel": 0.5, "chemical_env": 0.6},
+   "difficulty": 0.18, "difficulty_reasons": ["гигроскопичен, нужна сушка", "коробление"],
+   "mode_5d": "ok"
+  },
+  "enduse_pp": {
+   "label": "Enduse PP", "family": "PP", "line": "Enduse",
+   "attributes": {"service_temp_c": 90, "softening_temp_c": 90, "modulus_mpa": 1300, "tensile_mpa": 30, "elongation_pct": 100, "water_absorption_pct": 0.01, "filler": "none", "conductive": false, "flexible": false, "shore": "D70"},
+   "properties": {"strength": 0.4, "stiffness": 0.3, "toughness": 0.8, "fatigue": 0.95, "creep": 0.3, "wear": 0.5, "low_friction": 0.6, "high_friction": 0.2, "heat": 0.5, "uv": 0.2, "moisture": 1.0, "chem_acid_salt": 1.0, "chem_alkali": 1.0, "chem_oil_fuel": 0.5, "chem_alcohol": 0.9, "chem_glycol": 0.9, "ozone": 0.5, "food_safe": 0.7, "esd": 0.0, "dielectric": 1.0, "surface_finish": 0.5, "accuracy": 0.4, "flexibility": 0.35, "layer_adhesion": 0.5, "lightweight": 1.0, "gentle_on_mating": 0.9},
+   "applications": {"chemical_env": 1.0, "food_contact": 0.5, "sliding_wear": 0.4},
+   "difficulty": 0.15, "difficulty_reasons": ["плохая адгезия к столу", "коробление"],
+   "mode_5d": "ok"
+  },
+  "enduse_sbs": {
+   "label": "Enduse SBS", "family": "SBS", "line": "Enduse",
+   "attributes": {"service_temp_c": 75, "softening_temp_c": 85, "modulus_mpa": 1500, "tensile_mpa": 30, "elongation_pct": 150, "water_absorption_pct": 0.1, "filler": "none", "conductive": false, "flexible": false, "shore": "D65"},
+   "properties": {"strength": 0.4, "stiffness": 0.35, "toughness": 0.9, "fatigue": 0.6, "creep": 0.3, "wear": 0.4, "low_friction": 0.3, "high_friction": 0.4, "heat": 0.4, "uv": 0.3, "moisture": 0.8, "chem_acid_salt": 0.7, "chem_alkali": 0.7, "chem_oil_fuel": 0.3, "chem_alcohol": 0.5, "chem_glycol": 0.6, "ozone": 0.4, "food_safe": 1.0, "esd": 0.0, "dielectric": 0.9, "surface_finish": 0.8, "accuracy": 0.7, "flexibility": 0.3, "layer_adhesion": 0.8, "lightweight": 0.8, "gentle_on_mating": 0.9},
+   "applications": {"food_contact": 1.0, "housing": 0.6, "decorative": 0.5},
+   "difficulty": 0.05, "difficulty_reasons": [],
+   "mode_5d": "ok"
+  },
+  "enduse_tpu_d70": {
+   "label": "Enduse TPU D70", "family": "TPU (Shore D70)", "line": "Enduse",
+   "attributes": {"service_temp_c": 80, "softening_temp_c": 110, "modulus_mpa": 400, "tensile_mpa": 45, "elongation_pct": 300, "water_absorption_pct": 0.5, "filler": "none", "conductive": false, "flexible": false, "shore": "D70"},
+   "properties": {"strength": 0.6, "stiffness": 0.25, "toughness": 1.0, "fatigue": 0.9, "creep": 0.4, "wear": 1.0, "low_friction": 0.4, "high_friction": 0.8, "heat": 0.5, "uv": 0.5, "moisture": 0.6, "chem_acid_salt": 0.6, "chem_alkali": 0.6, "chem_oil_fuel": 0.9, "chem_alcohol": 0.6, "chem_glycol": 0.6, "ozone": 0.8, "food_safe": 0.3, "esd": 0.0, "dielectric": 0.9, "surface_finish": 0.6, "accuracy": 0.6, "flexibility": 0.5, "layer_adhesion": 0.9, "lightweight": 0.5, "gentle_on_mating": 0.9},
+   "applications": {"roller_wheel": 0.9, "sliding_wear": 0.6, "seal_flexible": 0.5, "gear": 0.5, "chemical_env": 0.6},
+   "difficulty": 0.1, "difficulty_reasons": ["эластичный пруток: низкая скорость подачи"],
+   "mode_5d": "ok"
+  },
+  "fiberpart_abs_g4": {
+   "label": "Fiberpart ABS G4", "family": "ABS + стекловолокно", "line": "Fiberpart",
+   "attributes": {"service_temp_c": 90, "softening_temp_c": 102, "modulus_mpa": 2800, "tensile_mpa": 42, "elongation_pct": 5, "water_absorption_pct": 0.3, "filler": "glass", "conductive": false, "flexible": false, "shore": "D80"},
+   "properties": {"strength": 0.6, "stiffness": 0.65, "toughness": 0.55, "fatigue": 0.5, "creep": 0.6, "wear": 0.5, "low_friction": 0.3, "high_friction": 0.3, "heat": 0.7, "uv": 0.1, "moisture": 0.55, "chem_acid_salt": 0.7, "chem_alkali": 0.7, "chem_oil_fuel": 0.5, "chem_alcohol": 0.3, "chem_glycol": 0.6, "ozone": 0.4, "food_safe": 0.05, "esd": 0.0, "dielectric": 0.9, "surface_finish": 0.55, "accuracy": 0.7, "flexibility": 0.0, "layer_adhesion": 0.6, "lightweight": 0.75, "gentle_on_mating": 0.5},
+   "applications": {"housing": 0.6, "bracket_load": 0.6},
+   "difficulty": 0.1, "difficulty_reasons": ["абразивный наполнитель: износ сопла", "коробление"],
+   "mode_5d": "ok"
+  },
+  "fiberpart_abs_g13": {
+   "label": "Fiberpart ABS G13", "family": "ABS + стекловолокно", "line": "Fiberpart",
+   "attributes": {"service_temp_c": 95, "softening_temp_c": 105, "modulus_mpa": 4000, "tensile_mpa": 50, "elongation_pct": 3, "water_absorption_pct": 0.3, "filler": "glass", "conductive": false, "flexible": false, "shore": "D82"},
+   "properties": {"strength": 0.7, "stiffness": 0.8, "toughness": 0.45, "fatigue": 0.55, "creep": 0.7, "wear": 0.55, "low_friction": 0.3, "high_friction": 0.3, "heat": 0.75, "uv": 0.1, "moisture": 0.55, "chem_acid_salt": 0.7, "chem_alkali": 0.7, "chem_oil_fuel": 0.5, "chem_alcohol": 0.3, "chem_glycol": 0.6, "ozone": 0.4, "food_safe": 0.05, "esd": 0.0, "dielectric": 0.9, "surface_finish": 0.5, "accuracy": 0.8, "flexibility": 0.0, "layer_adhesion": 0.8, "lightweight": 0.7, "gentle_on_mating": 0.4},
+   "applications": {"bracket_load": 0.8, "housing": 0.8, "fit_mating": 0.6, "impeller_fan": 0.5},
+   "difficulty": 0.08, "difficulty_reasons": ["абразивный наполнитель: износ сопла"],
+   "mode_5d": "ok"
+  },
+  "fiberpart_abspa_g8": {
+   "label": "Fiberpart ABSPA G8", "family": "ABS/PA + стекловолокно", "line": "Fiberpart",
+   "attributes": {"service_temp_c": 100, "softening_temp_c": 115, "modulus_mpa": 3200, "tensile_mpa": 50, "elongation_pct": 5, "water_absorption_pct": 0.6, "filler": "glass", "conductive": false, "flexible": false, "shore": "D80"},
+   "properties": {"strength": 0.7, "stiffness": 0.7, "toughness": 0.8, "fatigue": 0.6, "creep": 0.65, "wear": 0.6, "low_friction": 0.4, "high_friction": 0.3, "heat": 0.75, "uv": 0.85, "moisture": 0.45, "chem_acid_salt": 0.6, "chem_alkali": 0.7, "chem_oil_fuel": 0.75, "chem_alcohol": 0.8, "chem_glycol": 0.6, "ozone": 0.7, "food_safe": 0.05, "esd": 0.0, "dielectric": 0.9, "surface_finish": 0.5, "accuracy": 0.7, "flexibility": 0.0, "layer_adhesion": 0.7, "lightweight": 0.75, "gentle_on_mating": 0.5},
+   "applications": {"outdoor": 0.9, "automotive": 0.6, "gear": 0.5, "housing": 0.6},
+   "difficulty": 0.12, "difficulty_reasons": ["высокая температура печати", "абразивный наполнитель"],
+   "mode_5d": "ok"
+  },
+  "fiberpart_pa12_g12": {
+   "label": "Fiberpart PA12 G12", "family": "PA12 + стекловолокно", "line": "Fiberpart",
+   "attributes": {"service_temp_c": 120, "softening_temp_c": 160, "modulus_mpa": 3500, "tensile_mpa": 60, "elongation_pct": 5, "water_absorption_pct": 0.3, "filler": "glass", "conductive": false, "flexible": false, "shore": "D80"},
+   "properties": {"strength": 0.8, "stiffness": 0.75, "toughness": 0.7, "fatigue": 0.9, "creep": 0.7, "wear": 0.9, "low_friction": 0.7, "high_friction": 0.2, "heat": 0.8, "uv": 0.5, "moisture": 0.6, "chem_acid_salt": 0.5, "chem_alkali": 0.8, "chem_oil_fuel": 0.95, "chem_alcohol": 0.7, "chem_glycol": 0.75, "ozone": 0.7, "food_safe": 0.2, "esd": 0.0, "dielectric": 0.85, "surface_finish": 0.5, "accuracy": 0.75, "flexibility": 0.0, "layer_adhesion": 0.7, "lightweight": 0.8, "gentle_on_mating": 0.4},
+   "applications": {"gear": 0.8, "shaft_axle": 0.8, "sliding_wear": 0.8, "bracket_load": 0.7, "impeller_fan": 0.7},
+   "difficulty": 0.12, "difficulty_reasons": ["гигроскопичен, нужна сушка", "абразивный наполнитель"],
+   "mode_5d": "ok"
+  },
+  "fiberpart_pc_g20": {
+   "label": "Fiberpart PC G20", "family": "PC + стекловолокно", "line": "Fiberpart",
+   "attributes": {"service_temp_c": 130, "softening_temp_c": 150, "modulus_mpa": 6000, "tensile_mpa": 80, "elongation_pct": 2.5, "water_absorption_pct": 0.12, "filler": "glass", "conductive": false, "flexible": false, "shore": "D85"},
+   "properties": {"strength": 0.95, "stiffness": 0.95, "toughness": 0.5, "fatigue": 0.6, "creep": 0.9, "wear": 0.6, "low_friction": 0.3, "high_friction": 0.3, "heat": 0.9, "uv": 0.45, "moisture": 0.6, "chem_acid_salt": 0.6, "chem_alkali": 0.1, "chem_oil_fuel": 0.55, "chem_alcohol": 0.2, "chem_glycol": 0.4, "ozone": 0.6, "food_safe": 0.05, "esd": 0.0, "dielectric": 0.85, "surface_finish": 0.45, "accuracy": 0.85, "flexibility": 0.0, "layer_adhesion": 0.6, "lightweight": 0.5, "gentle_on_mating": 0.3},
+   "applications": {"bracket_load": 0.9, "shaft_axle": 0.7, "gear": 0.6, "impeller_fan": 0.6, "automotive": 0.6},
+   "difficulty": 0.2, "difficulty_reasons": ["очень высокая температура печати", "коробление", "абразивный наполнитель"],
+   "mode_5d": "ok"
+  },
+  "fiberpart_pp_g30": {
+   "label": "Fiberpart PP G30", "family": "PP + 30% стекловолокна", "line": "Fiberpart",
+   "attributes": {"service_temp_c": 120, "softening_temp_c": 135, "modulus_mpa": 5500, "tensile_mpa": 70, "elongation_pct": 3, "water_absorption_pct": 0.02, "filler": "glass", "conductive": false, "flexible": false, "shore": "D80"},
+   "properties": {"strength": 0.75, "stiffness": 0.9, "toughness": 0.55, "fatigue": 0.8, "creep": 0.8, "wear": 0.65, "low_friction": 0.5, "high_friction": 0.2, "heat": 0.8, "uv": 0.45, "moisture": 1.0, "chem_acid_salt": 1.0, "chem_alkali": 1.0, "chem_oil_fuel": 0.6, "chem_alcohol": 0.9, "chem_glycol": 1.0, "ozone": 0.6, "food_safe": 0.2, "esd": 0.0, "dielectric": 1.0, "surface_finish": 0.4, "accuracy": 0.8, "flexibility": 0.0, "layer_adhesion": 0.6, "lightweight": 0.75, "gentle_on_mating": 0.3},
+   "applications": {"chemical_env": 0.9, "impeller_fan": 0.7, "automotive": 0.6, "shaft_axle": 0.5, "gear": 0.4},
+   "difficulty": 0.12, "difficulty_reasons": ["адгезия к столу", "абразивный наполнитель"],
+   "mode_5d": "ok"
+  },
+  "fiberpart_tpu_c5": {
+   "label": "Fiberpart TPU C5", "family": "TPU + углеволокно", "line": "Fiberpart",
+   "attributes": {"service_temp_c": 85, "softening_temp_c": 120, "modulus_mpa": 800, "tensile_mpa": 45, "elongation_pct": 100, "water_absorption_pct": 0.5, "filler": "carbon", "conductive": false, "flexible": false, "shore": "D70"},
+   "properties": {"strength": 0.65, "stiffness": 0.45, "toughness": 0.95, "fatigue": 0.9, "creep": 0.5, "wear": 0.95, "low_friction": 0.5, "high_friction": 0.6, "heat": 0.55, "uv": 0.5, "moisture": 0.6, "chem_acid_salt": 0.6, "chem_alkali": 0.6, "chem_oil_fuel": 0.85, "chem_alcohol": 0.5, "chem_glycol": 0.6, "ozone": 0.8, "food_safe": 0.05, "esd": 0.7, "dielectric": 0.1, "surface_finish": 0.5, "accuracy": 0.6, "flexibility": 0.3, "layer_adhesion": 0.9, "lightweight": 0.6, "gentle_on_mating": 0.6},
+   "applications": {"gear": 0.9, "roller_wheel": 0.7, "sliding_wear": 0.5},
+   "difficulty": 0.12, "difficulty_reasons": ["эластичная основа", "абразивный наполнитель"],
+   "mode_5d": "ok"
+  },
+  "fiberpart_tpu_g30": {
+   "label": "Fiberpart TPU G30", "family": "TPU + 30% стекловолокна", "line": "Fiberpart",
+   "attributes": {"service_temp_c": 100, "softening_temp_c": 130, "modulus_mpa": 1500, "tensile_mpa": 50, "elongation_pct": 30, "water_absorption_pct": 0.5, "filler": "glass", "conductive": false, "flexible": false, "shore": "D75"},
+   "properties": {"strength": 0.7, "stiffness": 0.55, "toughness": 0.9, "fatigue": 0.85, "creep": 0.6, "wear": 0.9, "low_friction": 0.45, "high_friction": 0.5, "heat": 0.7, "uv": 0.5, "moisture": 0.6, "chem_acid_salt": 0.6, "chem_alkali": 0.6, "chem_oil_fuel": 0.85, "chem_alcohol": 0.5, "chem_glycol": 0.6, "ozone": 0.8, "food_safe": 0.05, "esd": 0.0, "dielectric": 0.9, "surface_finish": 0.45, "accuracy": 0.65, "flexibility": 0.2, "layer_adhesion": 0.85, "lightweight": 0.2, "gentle_on_mating": 0.4},
+   "applications": {"gear": 0.8, "housing": 0.5, "bracket_load": 0.6, "roller_wheel": 0.6},
+   "difficulty": 0.12, "difficulty_reasons": ["абразивный наполнитель"],
+   "mode_5d": "ok"
+  },
+  "sealant_tpu_A95": {
+   "label": "Sealant TPU A95", "family": "TPU (Shore A95)", "line": "Sealant",
+   "attributes": {"service_temp_c": 80, "softening_temp_c": 100, "modulus_mpa": 30, "tensile_mpa": 35, "elongation_pct": 500, "water_absorption_pct": 1.0, "filler": "none", "conductive": false, "flexible": true, "shore": "A95"},
+   "properties": {"strength": 0.45, "stiffness": 0.05, "toughness": 1.0, "fatigue": 0.9, "creep": 0.2, "wear": 0.9, "low_friction": 0.2, "high_friction": 0.9, "heat": 0.45, "uv": 0.5, "moisture": 0.3, "chem_acid_salt": 0.6, "chem_alkali": 0.5, "chem_oil_fuel": 0.8, "chem_alcohol": 0.5, "chem_glycol": 0.5, "ozone": 0.8, "food_safe": 0.2, "esd": 0.0, "dielectric": 0.9, "surface_finish": 0.6, "accuracy": 0.4, "flexibility": 1.0, "layer_adhesion": 0.9, "lightweight": 0.6, "gentle_on_mating": 1.0},
+   "applications": {"seal_flexible": 0.9, "roller_wheel": 0.5},
+   "difficulty": 0.15, "difficulty_reasons": ["гигроскопичен, нужна сушка", "эластичный пруток"],
+   "mode_5d": "poor"
+  },
+  "sealant_tpu": {
+   "label": "Sealant TPU", "family": "TPU", "line": "Sealant",
+   "attributes": {"service_temp_c": 80, "softening_temp_c": 100, "modulus_mpa": 40, "tensile_mpa": 35, "elongation_pct": 450, "water_absorption_pct": 0.8, "filler": "none", "conductive": false, "flexible": true, "shore": "A95"},
+   "properties": {"strength": 0.45, "stiffness": 0.05, "toughness": 1.0, "fatigue": 0.9, "creep": 0.2, "wear": 0.85, "low_friction": 0.2, "high_friction": 0.85, "heat": 0.45, "uv": 0.5, "moisture": 0.4, "chem_acid_salt": 0.7, "chem_alkali": 0.6, "chem_oil_fuel": 0.8, "chem_alcohol": 0.6, "chem_glycol": 0.6, "ozone": 0.8, "food_safe": 0.2, "esd": 0.0, "dielectric": 0.9, "surface_finish": 0.6, "accuracy": 0.4, "flexibility": 0.95, "layer_adhesion": 0.9, "lightweight": 0.6, "gentle_on_mating": 1.0},
+   "applications": {"seal_flexible": 0.9, "chemical_env": 0.7},
+   "difficulty": 0.12, "difficulty_reasons": ["эластичный пруток"],
+   "mode_5d": "poor"
+  },
+  "sealant_tpu93": {
+   "label": "Sealant TPU93", "family": "TPU (Shore A93)", "line": "Sealant",
+   "attributes": {"service_temp_c": 75, "softening_temp_c": 95, "modulus_mpa": 20, "tensile_mpa": 30, "elongation_pct": 550, "water_absorption_pct": 0.8, "filler": "none", "conductive": false, "flexible": true, "shore": "A93"},
+   "properties": {"strength": 0.4, "stiffness": 0.03, "toughness": 1.0, "fatigue": 0.9, "creep": 0.15, "wear": 0.85, "low_friction": 0.2, "high_friction": 0.9, "heat": 0.4, "uv": 0.5, "moisture": 0.4, "chem_acid_salt": 0.6, "chem_alkali": 0.5, "chem_oil_fuel": 0.75, "chem_alcohol": 0.5, "chem_glycol": 0.5, "ozone": 0.8, "food_safe": 0.2, "esd": 0.0, "dielectric": 0.9, "surface_finish": 0.6, "accuracy": 0.35, "flexibility": 1.0, "layer_adhesion": 0.9, "lightweight": 0.6, "gentle_on_mating": 1.0},
+   "applications": {"seal_flexible": 0.8},
+   "difficulty": 0.15, "difficulty_reasons": ["очень мягкий пруток"],
+   "mode_5d": "poor"
+  },
+  "sealant_tpe": {
+   "label": "Sealant TPE", "family": "TPE", "line": "Sealant",
+   "attributes": {"service_temp_c": 80, "softening_temp_c": 95, "modulus_mpa": 15, "tensile_mpa": 15, "elongation_pct": 500, "water_absorption_pct": 0.3, "filler": "none", "conductive": false, "flexible": true, "shore": "A85"},
+   "properties": {"strength": 0.3, "stiffness": 0.02, "toughness": 0.9, "fatigue": 0.85, "creep": 0.15, "wear": 0.6, "low_friction": 0.15, "high_friction": 0.9, "heat": 0.45, "uv": 0.6, "moisture": 0.7, "chem_acid_salt": 0.6, "chem_alkali": 0.6, "chem_oil_fuel": 0.4, "chem_alcohol": 0.5, "chem_glycol": 0.6, "ozone": 0.8, "food_safe": 0.3, "esd": 0.0, "dielectric": 0.9, "surface_finish": 0.6, "accuracy": 0.3, "flexibility": 0.95, "layer_adhesion": 0.85, "lightweight": 0.7, "gentle_on_mating": 1.0},
+   "applications": {"seal_flexible": 0.8},
+   "difficulty": 0.15, "difficulty_reasons": ["очень мягкий пруток"],
+   "mode_5d": "poor"
+  },
+  "sealant_sebs": {
+   "label": "Sealant SEBS", "family": "SEBS", "line": "Sealant",
+   "attributes": {"service_temp_c": 70, "softening_temp_c": 90, "modulus_mpa": 10, "tensile_mpa": 12, "elongation_pct": 600, "water_absorption_pct": 0.1, "filler": "none", "conductive": false, "flexible": true, "shore": "A80"},
+   "properties": {"strength": 0.25, "stiffness": 0.02, "toughness": 0.9, "fatigue": 0.85, "creep": 0.1, "wear": 0.5, "low_friction": 0.15, "high_friction": 0.9, "heat": 0.35, "uv": 0.7, "moisture": 0.9, "chem_acid_salt": 0.7, "chem_alkali": 0.7, "chem_oil_fuel": 0.2, "chem_alcohol": 0.6, "chem_glycol": 0.7, "ozone": 0.9, "food_safe": 0.3, "esd": 0.0, "dielectric": 0.9, "surface_finish": 0.6, "accuracy": 0.3, "flexibility": 1.0, "layer_adhesion": 0.85, "lightweight": 0.9, "gentle_on_mating": 1.0},
+   "applications": {"seal_flexible": 0.7, "outdoor": 0.6},
+   "difficulty": 0.15, "difficulty_reasons": ["очень мягкий пруток"],
+   "mode_5d": "poor"
+  },
+  "sealant_tpv80": {
+   "label": "Sealant TPV80", "family": "TPV (Shore A80)", "line": "Sealant",
+   "attributes": {"service_temp_c": 110, "softening_temp_c": 130, "modulus_mpa": 10, "tensile_mpa": 10, "elongation_pct": 400, "water_absorption_pct": 0.1, "filler": "none", "conductive": false, "flexible": true, "shore": "A80"},
+   "properties": {"strength": 0.3, "stiffness": 0.02, "toughness": 0.9, "fatigue": 0.9, "creep": 0.2, "wear": 0.6, "low_friction": 0.15, "high_friction": 0.85, "heat": 0.7, "uv": 0.8, "moisture": 0.9, "chem_acid_salt": 0.8, "chem_alkali": 0.8, "chem_oil_fuel": 1.0, "chem_alcohol": 0.7, "chem_glycol": 0.8, "ozone": 0.9, "food_safe": 0.2, "esd": 0.0, "dielectric": 0.9, "surface_finish": 0.6, "accuracy": 0.3, "flexibility": 0.95, "layer_adhesion": 0.85, "lightweight": 0.7, "gentle_on_mating": 1.0},
+   "applications": {"seal_flexible": 0.9, "automotive": 0.6, "outdoor": 0.6, "chemical_env": 0.6},
+   "difficulty": 0.15, "difficulty_reasons": ["высокая температура печати для эластомера", "мягкий пруток"],
+   "mode_5d": "poor"
+  }
+ },
+
+ "constraints": {
+  "nozzle_temp_warning_c": {"label": "предупреждение слайсера о температуре сопла", "source": "slicer_catalog: material_print_temperature.max_warning"},
+  "bed_temp_warning_c": {"label": "предупреждение слайсера о температуре стола", "source": "slicer_catalog: material_bed_temperature.max_warning"},
+  "drying": {"label": "нужна сушка прутка перед печатью"},
+  "warping": {"label": "коробление, нужна закрытая камера или клей"},
+  "mode_5d": {"label": "пригодность для 5D: мягкие эластомеры линейки Sealant плохо наматываются на стержень (требует подтверждения Stereotech)"}
+ },
+
+ "excluded_materials": {
+  "proto_pva": "водорастворимый материал поддержек",
+  "metalcast_316l": "филамент для металлических деталей, нужна постобработка",
+  "metalcast_al99": "филамент для металлических деталей, нужна постобработка",
+  "contifiber_cpa": "непрерывное волокно для Fiber 530"
+ }
+}

@@ -1,0 +1,10 @@
+# Development environment that mirrors the STE Slicer runtime (Python 3.5, numpy of that era).
+# scipy is optional at runtime: the pipeline falls back to pure numpy when it is absent.
+name: ste-assistant
+channels:
+  - defaults
+dependencies:
+  - python=3.5
+  - numpy=1.15
+  - scipy=1.1
+  - pytest=3.8
