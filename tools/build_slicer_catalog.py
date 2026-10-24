@@ -4,10 +4,10 @@
 The catalog is the static picture of the slicer that the pipeline uses when it
 runs outside the slicer (CLI, tests) and as the source of allowed values for
 the LLM: setting keys with types, defaults and limits for Stereotech Hybrid 530
-V5.2, quality profiles and 1.75 mm materials.
+V5.2.4, quality profiles and 1.75 mm materials.
 
 Usage:
-    python tools/build_slicer_catalog.py [--repo third_party/STE-Slicer] [--out ...]
+    python tools/build_slicer_catalog.py [--repo PATH_TO_STE_SLICER_SOURCE] [--out ...]
 
 Limits given as expressions (e.g. "0.8 * min(extruderValues('machine_nozzle_size'))")
 are evaluated over the default values of the machine; expressions that cannot be
@@ -28,11 +28,12 @@ from collections import OrderedDict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
+# STE Slicer source tree with the Hybrid 530 V5.2.4 definitions (the public repository only has V5.2).
 DEFAULT_REPO = os.path.join(ROOT, "third_party", "STE-Slicer")
 DEFAULT_OUT = os.path.join(ROOT, "plugin", "AIAssistant", "printplan", "data", "slicer_catalog.json")
 
-MACHINE_ID = "hte530v5.2"
-EXTRUDER_IDS = ["stereotech_v5_extruder_main", "stereotech_v5_extruder_second"]
+MACHINE_ID = "hte530v5.2.4"
+EXTRUDER_IDS = ["stereotech_v5.2.4_extruder_main", "stereotech_v5.2.4_extruder_second"]
 USED_MODES = ["classic", "cylindrical", "cylindrical_full"]
 
 LIMIT_PROPS = [
@@ -266,11 +267,29 @@ def parse_materials(repo, diameter=1.75):
 
 
 def git_commit(repo):
+    """Commit of the source tree, or None when it is not a git checkout (e.g. an unpacked archive)."""
+    if not os.path.exists(os.path.join(repo, ".git")):
+        return None  # git would report the commit of an enclosing repository instead
     try:
         out = subprocess.check_output(["git", "-C", repo, "log", "-1", "--format=%H %cI"])
         return out.decode("utf-8").strip()
     except Exception:
         return None
+
+
+def value_in_mode(settings, key, mode):
+    """Evaluate a setting's value expression with printing_mode fixed to `mode`."""
+    props = settings[key]
+    expr = props.get("value")
+    if not isinstance(expr, str):
+        return props.get("default_value")
+    ctx = make_eval_context(settings)
+    ctx["printing_mode"] = mode
+    ctx["resolveOrValue"] = lambda k: mode if k == "printing_mode" else ctx[k]
+    try:
+        return eval(expr, {"__builtins__": SAFE_BUILTINS}, ctx)
+    except Exception:
+        return props.get("default_value")
 
 
 def build(repo):
@@ -289,7 +308,7 @@ def build(repo):
     ctx = make_eval_context(settings)
     catalog = OrderedDict()
     catalog["source"] = OrderedDict([
-        ("repo", "https://github.com/stereotech/STE-Slicer"),
+        ("repo", "STE Slicer source with the Hybrid 530 V5.2.4 definitions (base: https://github.com/stereotech/STE-Slicer)"),
         ("commit", git_commit(repo)),
         ("machine", MACHINE_ID),
         ("definition_chain", [d["_id"] for d in chain]),
@@ -300,13 +319,13 @@ def build(repo):
         ("name", s["machine_name"]["default_value"]),
         ("width", s["machine_width"]["default_value"]),
         ("depth", s["machine_depth"]["default_value"]),
-        ("height_classic", 300),
-        ("height_5d", 250),
+        ("height_classic", value_in_mode(s, "machine_height", "classic")),
+        ("height_5d", value_in_mode(s, "machine_height", "cylindrical")),
         ("height_value_expr", s["machine_height"].get("value")),
-        ("shape_classic", "rectangular"),
-        ("shape_5d", "elliptic"),
-        ("center_is_zero_5d", True),
-        ("heated_bed_5d", False),
+        ("shape_classic", value_in_mode(s, "machine_shape", "classic")),
+        ("shape_5d", value_in_mode(s, "machine_shape", "cylindrical")),
+        ("center_is_zero_5d", bool(value_in_mode(s, "machine_center_is_zero", "cylindrical"))),
+        ("heated_bed_5d", bool(value_in_mode(s, "machine_heated_bed", "cylindrical"))),
         ("nozzle_size", s["machine_nozzle_size"]["default_value"]),
         ("material_diameter", s["material_diameter"]["default_value"]),
         ("extruder_count", s["machine_extruder_count"]["default_value"]),

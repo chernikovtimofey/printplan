@@ -54,7 +54,7 @@ def final_settings(plan, E_G):
             out[key] = OrderedDict([("value", item.get("value")),
                                     ("reason", item.get("reason") or (theta0[key]["reason"] if same else "")),
                                     ("source", "rules" if same else "plan")])
-    out["printing_mode"] = OrderedDict([("value", mode), ("reason", "режим печати"), ("source", "plan")])
+    out["printing_mode"] = OrderedDict([("value", mode), ("reason", "режим печати"), ("source", "mode")])
     out.move_to_end("printing_mode", last=False)
     return out
 

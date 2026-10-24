@@ -1,0 +1,8 @@
+{
+    "name": "AI Assistant",
+    "author": "Team",
+    "version": "0.1.0",
+    "description": "LLM chat assistant for STE Slicer: chooses 3D/5D mode, profile, material, settings and orientation, slices and explains its decisions",
+    "api": 5,
+    "i18n-catalog": "steslicer"
+}

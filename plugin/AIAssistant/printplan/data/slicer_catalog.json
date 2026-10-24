@@ -1,26 +1,26 @@
 {
  "source": {
-  "repo": "https://github.com/stereotech/STE-Slicer",
-  "commit": "3c863ed024aa98de33a10200462869517987e280 2024-02-14T09:40:34+03:00",
-  "machine": "hte530v5.2",
+  "repo": "STE Slicer source with the Hybrid 530 V5.2.4 definitions (base: https://github.com/stereotech/STE-Slicer)",
+  "commit": null,
+  "machine": "hte530v5.2.4",
   "definition_chain": [
-   "hte530v5.2",
-   "steprinter530_v5.2",
+   "hte530v5.2.4",
+   "steprinter530_v5.2.4",
    "steprinter_v5",
    "fdmprinter"
   ],
   "extruders": [
-   "stereotech_v5_extruder_main",
-   "stereotech_v5_extruder_second"
+   "stereotech_v5.2.4_extruder_main",
+   "stereotech_v5.2.4_extruder_second"
   ]
  },
  "machine": {
-  "name": "Stereotech Hybrid 530 V5.2",
-  "width": 315,
+  "name": "Stereotech Hybrid 530 V5.2.4",
+  "width": 351,
   "depth": 300.3,
   "height_classic": 300,
-  "height_5d": 250,
-  "height_value_expr": "300 if resolveOrValue('printing_mode') in ['classic'] else 250",
+  "height_5d": 231.1,
+  "height_value_expr": "300 if resolveOrValue('printing_mode') in ['classic'] else 231.1",
   "shape_classic": "rectangular",
   "shape_5d": "elliptic",
   "center_is_zero_5d": true,
@@ -32,9 +32,9 @@
   "hybrid": true
  },
  "printing_modes": {
-  "classic": "Classic",
+  "classic": "3D",
   "cylindrical": "5D Spiral",
-  "cylindrical_full": "5D Spiral Full"
+  "cylindrical_full": "5D"
  },
  "quality_profiles": [
   {
@@ -155,25 +155,25 @@
    "diameter": 1.75,
    "density": 1.05,
    "print_temperature": 260,
-   "bed_temperature": 100,
+   "bed_temperature": 95,
    "description": "Полимерный материал на основе полиамида-6. Обладает высокой химической стойкостью, в том числе к разбавленным щелочам и кислотам, маслам, спиртам, смазочным жидкостям, бензину. Также отличается упругостью, эластичностью, очень стоек к истиранию и ударным нагрузкам. Предназначен для печати изделий, работающих в агрессивной среде, особенно для элементов скольжения (направляющие кольца, вкладыши подшипников трения).",
    "adhesion_info": "печать на столе: Нанести клей-адгезив на чистое обезжиренное стекло; печать на цилиндрическом основании: Наклеить малярный скотч на основание. Для изделий с толщиной меньше 3 мм - нанести на скотч клей-адгезив.",
    "settings": {
     "default_material_print_temperature": 260,
     "material_standby_temperature": 175,
-    "default_material_bed_temperature": 100,
+    "default_material_bed_temperature": 95,
     "cool_fan_speed": 0.0,
-    "retraction_amount": 7.0,
-    "retraction_speed": 25
+    "retraction_amount": 2.11,
+    "retraction_speed": 20
    },
    "raw_settings": {
     "print temperature": 260,
     "standby temperature": 175,
-    "heated bed temperature": 100,
+    "heated bed temperature": 95,
     "print cooling": 0.0,
-    "retraction amount": 7.0,
-    "retraction speed": 25,
-    "speed print": 40
+    "retraction amount": 2.11,
+    "retraction speed": 20,
+    "speed print": 50
    }
   },
   {
@@ -184,13 +184,13 @@
    "diameter": 1.75,
    "density": 1.2,
    "print_temperature": 280,
-   "bed_temperature": 100,
+   "bed_temperature": 105,
    "description": "Поликарбонат (PC) выделяется оптической прозрачностью, термостойкостью и невероятной прочностью. Это делает его идеальным для использования в электронных корпусах, автомобильных деталях, элементах беспилотных летательных аппаратов и других подобных деталях, требующих долговечности.",
    "adhesion_info": "печать на столе: Нанести клей-адгезив на чистое обезжиренное стекло; печать на цилиндрическом основании: Наклеить малярный скотч на основание. Для изделий с толщиной меньше 3 мм - нанести на скотч клей-адгезив.",
    "settings": {
     "default_material_print_temperature": 280,
     "material_standby_temperature": 175,
-    "default_material_bed_temperature": 100,
+    "default_material_bed_temperature": 105,
     "cool_fan_speed": 0.0,
     "retraction_amount": 5.0,
     "retraction_speed": 25
@@ -198,7 +198,7 @@
    "raw_settings": {
     "print temperature": 280,
     "standby temperature": 175,
-    "heated bed temperature": 100,
+    "heated bed temperature": 105,
     "print cooling": 0.0,
     "retraction amount": 5.0,
     "retraction speed": 25,
@@ -212,26 +212,26 @@
    "material": "Enduse",
    "diameter": 1.75,
    "density": 1.3,
-   "print_temperature": 240,
+   "print_temperature": 235,
    "bed_temperature": 60,
    "description": "Полимерный материал с высокой ударопрочностью, высокой адгезией между слоев и низкой усадкой. Предназначен для корпусов, держателей и габаритных изделий.",
    "adhesion_info": "печать на столе: нанести клей-адгезив на чистое обезжиренное стекло; печать на цилиндрическом основании: наклеить малярный скотч на основание и нанести клей- адгезив",
    "settings": {
-    "default_material_print_temperature": 240,
+    "default_material_print_temperature": 235,
     "material_standby_temperature": 175,
     "default_material_bed_temperature": 60,
-    "cool_fan_speed": 0.0,
-    "retraction_amount": 3.0,
-    "retraction_speed": 40
+    "cool_fan_speed": 20.0,
+    "retraction_amount": 1.5,
+    "retraction_speed": 11.5
    },
    "raw_settings": {
-    "print temperature": 240,
+    "print temperature": 235,
     "standby temperature": 175,
     "heated bed temperature": 60,
-    "print cooling": 0.0,
-    "retraction amount": 3.0,
-    "retraction speed": 40,
-    "speed print": 50
+    "print cooling": 20.0,
+    "retraction amount": 1.5,
+    "retraction speed": 11.5,
+    "speed print": 45
    }
   },
   {
@@ -241,26 +241,26 @@
    "material": "Enduse",
    "diameter": 1.75,
    "density": 0.9,
-   "print_temperature": 230,
-   "bed_temperature": 60,
+   "print_temperature": 225,
+   "bed_temperature": 50,
    "description": "Полимерный материал с высокой химической стойкостью и эластичностью. Предназначен для печати изделий, работающих в агрессивной среде.",
    "adhesion_info": "печать на столе: наклеить на стол прозрачный скотч; печать на цилиндрическом основании: наклеить прозрачный скотч на основание",
    "settings": {
-    "default_material_print_temperature": 230,
+    "default_material_print_temperature": 225,
     "material_standby_temperature": 175,
-    "default_material_bed_temperature": 60,
+    "default_material_bed_temperature": 50,
     "cool_fan_speed": 0.0,
-    "retraction_amount": 3.0,
-    "retraction_speed": 25
+    "retraction_amount": 3.55,
+    "retraction_speed": 30
    },
    "raw_settings": {
-    "print temperature": 230,
+    "print temperature": 225,
     "standby temperature": 175,
-    "heated bed temperature": 60,
+    "heated bed temperature": 50,
     "print cooling": 0.0,
-    "retraction amount": 3.0,
-    "retraction speed": 25,
-    "speed print": 40
+    "retraction amount": 3.55,
+    "retraction speed": 30,
+    "speed print": 30
    }
   },
   {
@@ -270,22 +270,22 @@
    "material": "Enduse",
    "diameter": 1.75,
    "density": 1.01,
-   "print_temperature": 240,
-   "bed_temperature": 70,
+   "print_temperature": 230,
+   "bed_temperature": 80,
    "description": "Полимерный материал с допуском для контакта с пищей (в том числе горячей). Предназначен для печати ударопрочных корпусов, тактильно приятных конечных изделий (накладок, ручек, панелей).",
    "adhesion_info": "печать на столе: нанести клей-адгезив на чистое обезжиренное стекло; печать на цилиндрическом основании: наклеить малярный скотч на основание и нанести клей- адгезив",
    "settings": {
-    "default_material_print_temperature": 240,
+    "default_material_print_temperature": 230,
     "material_standby_temperature": 175,
-    "default_material_bed_temperature": 70,
+    "default_material_bed_temperature": 80,
     "cool_fan_speed": 20.0,
     "retraction_amount": 2.0,
     "retraction_speed": 20
    },
    "raw_settings": {
-    "print temperature": 240,
+    "print temperature": 230,
     "standby temperature": 175,
-    "heated bed temperature": 70,
+    "heated bed temperature": 80,
     "print cooling": 20.0,
     "retraction amount": 2.0,
     "retraction speed": 20,
@@ -307,18 +307,18 @@
     "default_material_print_temperature": 220,
     "material_standby_temperature": 175,
     "default_material_bed_temperature": 60,
-    "cool_fan_speed": 0.0,
-    "retraction_amount": 3.5,
-    "retraction_speed": 25
+    "cool_fan_speed": 20.0,
+    "retraction_amount": 1.4,
+    "retraction_speed": 27.5
    },
    "raw_settings": {
     "print temperature": 220,
     "standby temperature": 175,
     "heated bed temperature": 60,
-    "print cooling": 0.0,
-    "retraction amount": 3.5,
-    "retraction speed": 25,
-    "speed print": 50
+    "print cooling": 20.0,
+    "retraction amount": 1.4,
+    "retraction speed": 27.5,
+    "speed print": 40
    }
   },
   {
@@ -329,13 +329,13 @@
    "diameter": 1.75,
    "density": 1.15,
    "print_temperature": 270,
-   "bed_temperature": 100,
+   "bed_temperature": 105,
    "description": "Прочный композитный материал на основе ABS-пластика с высоким содержанием стекловолокна (13%). Отличается от ненаполненного ABS лучшей прочностью (в том числе на межслойный разрыв) и теплостойкостью, меньшей температурной усадкой; после печати даёт ровную шероховатую поверхность без ярко выраженного перехода между слоями. Как и обычный ABS, хорошо обрабатывается резанием, шлифованием и растворением (с помощью ацетона или другого органического растворителя). Предназначен для изготовления корпусов, кронштейнов, держателей, оснастки и других изделий, для которых прочности обычного ABS недостаточно.",
    "adhesion_info": "печать на столе: нанести клей-адгезив на чистое обезжиренное стекло; печать на цилиндрическом основании: наклеить малярный скотч на основание. Для изделий с толщиной более 3 мм - нанесите на скотч клей-адгезив",
    "settings": {
     "default_material_print_temperature": 270,
     "material_standby_temperature": 175,
-    "default_material_bed_temperature": 100,
+    "default_material_bed_temperature": 105,
     "cool_fan_speed": 0.0,
     "retraction_amount": 6.5,
     "retraction_speed": 25
@@ -343,11 +343,11 @@
    "raw_settings": {
     "print temperature": 270,
     "standby temperature": 175,
-    "heated bed temperature": 100,
+    "heated bed temperature": 105,
     "print cooling": 0.0,
     "retraction amount": 6.5,
     "retraction speed": 25,
-    "speed print": 50
+    "speed print": 60
    }
   },
   {
@@ -376,7 +376,7 @@
     "print cooling": 0.0,
     "retraction amount": 6.0,
     "retraction speed": 25,
-    "speed print": 50
+    "speed print": 40
    }
   },
   {
@@ -387,13 +387,13 @@
    "diameter": 1.75,
    "density": 1.12,
    "print_temperature": 280,
-   "bed_temperature": 110,
+   "bed_temperature": 115,
    "description": "Композит на основе ABS/PA армированный стекловолокном. Применяется для печати функциональных изделий, конструктивных элементов, где требуется высокая ударопрочность и стойкость к ультрафиолету. Инертен к большинству доступных химических растворителей",
    "adhesion_info": "печать на столе: нанести клей-адгезив на чистое обезжиренное стекло; печать на цилиндрическом основании: наклеить малярный скотч на основание. Для изделий с толщиной более 3 мм - нанесите на скотч клей-адгезив",
    "settings": {
     "default_material_print_temperature": 280,
     "material_standby_temperature": 175,
-    "default_material_bed_temperature": 110,
+    "default_material_bed_temperature": 115,
     "cool_fan_speed": 0.0,
     "retraction_amount": 7.0,
     "retraction_speed": 20
@@ -401,7 +401,7 @@
    "raw_settings": {
     "print temperature": 280,
     "standby temperature": 175,
-    "heated bed temperature": 110,
+    "heated bed temperature": 115,
     "print cooling": 0.0,
     "retraction amount": 7.0,
     "retraction speed": 20,
@@ -416,13 +416,13 @@
    "diameter": 1.75,
    "density": 1.05,
    "print_temperature": 250,
-   "bed_temperature": 100,
+   "bed_temperature": 105,
    "description": "Композитный материал на основе полиамида PA12, армированный стекловолокном (12%). Материал, отличающийся повышенной прочностью, термостойкостью и стойкостью к истиранию. Способен выдерживать циклические нагрузки. Сохраняет свои характеристики в широком диапазоне температур. Растворяется в концентрированной серной кислоте, в феноле, крезоле, хлорале и трифторэтаноле. Устойчив к действию спиртов, щелочей, масел и бензина.",
    "adhesion_info": "печать на столе: нанести клей-адгезив на чистое обезжиренное стекло; печать на цилиндрическом основании: наклеить малярный скотч на основание. Для изделий с толщиной более 3 мм - нанесите на скотч клей-адгезив",
    "settings": {
     "default_material_print_temperature": 250,
     "material_standby_temperature": 175,
-    "default_material_bed_temperature": 100,
+    "default_material_bed_temperature": 105,
     "cool_fan_speed": 0.0,
     "retraction_amount": 5.0,
     "retraction_speed": 30
@@ -430,7 +430,7 @@
    "raw_settings": {
     "print temperature": 250,
     "standby temperature": 175,
-    "heated bed temperature": 100,
+    "heated bed temperature": 105,
     "print cooling": 0.0,
     "retraction amount": 5.0,
     "retraction speed": 30,
@@ -445,24 +445,24 @@
    "diameter": 1.75,
    "density": 1.18,
    "print_temperature": 290,
-   "bed_temperature": 110,
+   "bed_temperature": 115,
    "description": "Очень прочный и жёсткий композит на основе PC с высоким содержанием стекловолокна (20%). Максимально широкий диапазон температур, высокая химстойкость. Для нагруженных функциональных деталей.",
    "adhesion_info": "печать на столе: нанести клей-адгезив на чистое обезжиренное стекло; печать на цилиндрическом основании: наклеить малярный скотч на основание. Для изделий с толщиной более 3 мм - нанесите на скотч клей-адгезив",
    "settings": {
     "default_material_print_temperature": 290,
     "material_standby_temperature": 175,
-    "default_material_bed_temperature": 110,
+    "default_material_bed_temperature": 115,
     "cool_fan_speed": 0.0,
-    "retraction_amount": 6.5,
-    "retraction_speed": 25
+    "retraction_amount": 6.4,
+    "retraction_speed": 30
    },
    "raw_settings": {
     "print temperature": 290,
     "standby temperature": 175,
-    "heated bed temperature": 110,
+    "heated bed temperature": 115,
     "print cooling": 0.0,
-    "retraction amount": 6.5,
-    "retraction speed": 25,
+    "retraction amount": 6.4,
+    "retraction speed": 30,
     "speed print": 50
    }
   },
@@ -474,25 +474,25 @@
    "diameter": 1.75,
    "density": 1.18,
    "print_temperature": 270,
-   "bed_temperature": 100,
+   "bed_temperature": 110,
    "description": "Материал на основе полипропилена с добавлением стекловолокна. Применяется для печати функциональных изделий, инженерного и промышленного применения. Обладает высокой химической стойкостью к большинству кислот и органических растворителей, морозостойкостью, гидролизостоек, устойчив к горячему тосолу.",
    "adhesion_info": "печать на столе: нанести клей-адгезив на чистое обезжиренное стекло; печать на цилиндрическом основании: наклеить малярный скотч на основание. Для изделий с толщиной более 3 мм - нанесите на скотч клей-адгезив",
    "settings": {
     "default_material_print_temperature": 270,
     "material_standby_temperature": 175,
-    "default_material_bed_temperature": 100,
+    "default_material_bed_temperature": 110,
     "cool_fan_speed": 0.0,
-    "retraction_amount": 4.5,
+    "retraction_amount": 3,
     "retraction_speed": 25
    },
    "raw_settings": {
     "print temperature": 270,
     "standby temperature": 175,
-    "heated bed temperature": 100,
+    "heated bed temperature": 110,
     "print cooling": 0.0,
-    "retraction amount": 4.5,
+    "retraction amount": 3,
     "retraction speed": 25,
-    "speed print": 50
+    "speed print": 40
    }
   },
   {
@@ -502,26 +502,26 @@
    "material": "Fiberpart",
    "diameter": 1.75,
    "density": 1.16,
-   "print_temperature": 240,
-   "bed_temperature": 100,
+   "print_temperature": 230,
+   "bed_temperature": 95,
    "description": "Полимерный материал на основе TPU с добавлением углеволокна. Применяется для печати шестерён, механически нагруженных деталей. Обладает высокой химической стойкостью к растворам кислот и щелочей, жирам, маслам, ксилолу, бензину, керосину.",
    "adhesion_info": "печать на столе: нанести клей-адгезив на чистое обезжиренное стекло; печать на цилиндрическом основании: наклеить малярный скотч на основание. Для изделий с толщиной меньше 3 мм - нанесите на скотч клей-адгезив",
    "settings": {
-    "default_material_print_temperature": 240,
+    "default_material_print_temperature": 230,
     "material_standby_temperature": 175,
-    "default_material_bed_temperature": 100,
-    "cool_fan_speed": 10.0,
-    "retraction_amount": 6.0,
-    "retraction_speed": 20
+    "default_material_bed_temperature": 95,
+    "cool_fan_speed": 20.0,
+    "retraction_amount": 1.5,
+    "retraction_speed": 18
    },
    "raw_settings": {
-    "print temperature": 240,
+    "print temperature": 230,
     "standby temperature": 175,
-    "heated bed temperature": 100,
-    "print cooling": 10.0,
-    "retraction amount": 6.0,
-    "retraction speed": 20,
-    "speed print": 50
+    "heated bed temperature": 95,
+    "print cooling": 20.0,
+    "retraction amount": 1.5,
+    "retraction speed": 18,
+    "speed print": 40
    }
   },
   {
@@ -532,13 +532,13 @@
    "diameter": 1.75,
    "density": 1.45,
    "print_temperature": 240,
-   "bed_temperature": 100,
+   "bed_temperature": 80,
    "description": "Полимерный материал на основе твёрдого TPU с добавлением стекловолокна (30%), подходит для производства изделий с повышенными требованиями к нагрузке и ударопрочности. Обладает высокой теплостойкостью и применяется для печати крупных шестерён, прочных корпусов, механически нагруженных деталей, аэродинамических обвесов для автомобилей.",
    "adhesion_info": "печать на столе: нанести клей-адгезив на чистое обезжиренное стекло; печать на цилиндрическом основании: наклеить малярный скотч на основание. Для изделий с толщиной меньше 3 мм - нанесите на скотч клей-адгезив",
    "settings": {
     "default_material_print_temperature": 240,
     "material_standby_temperature": 175,
-    "default_material_bed_temperature": 100,
+    "default_material_bed_temperature": 80,
     "cool_fan_speed": 0.0,
     "retraction_amount": 7.5,
     "retraction_speed": 40
@@ -546,7 +546,7 @@
    "raw_settings": {
     "print temperature": 240,
     "standby temperature": 175,
-    "heated bed temperature": 100,
+    "heated bed temperature": 80,
     "print cooling": 0.0,
     "retraction amount": 7.5,
     "retraction speed": 40,
@@ -776,26 +776,26 @@
    "material": "Metalcast",
    "diameter": 1.75,
    "density": 7.5,
-   "print_temperature": 160,
-   "bed_temperature": 40,
+   "print_temperature": 240,
+   "bed_temperature": 43,
    "description": "Нержавеющая конструкционная сталь марки AISI 316L. Предназначена для изготовления деталей промышленного оборудования в химической, пищевой, фармацевтической и химической промышленностях.",
    "adhesion_info": "Печать на столе: чистое стекло или каптоновая плёнка Печать на цилиндрическом основании: каптоновая плёнка (spiral – закрепить плёнку клеящим слоем наружу или использовать кольцевые поддержки для снятия детали)",
    "settings": {
-    "default_material_print_temperature": 160,
+    "default_material_print_temperature": 240,
     "material_standby_temperature": 100,
-    "default_material_bed_temperature": 40,
+    "default_material_bed_temperature": 43,
     "cool_fan_speed": 20.0,
-    "retraction_amount": 2.0,
-    "retraction_speed": 10
+    "retraction_amount": 3.0,
+    "retraction_speed": 8
    },
    "raw_settings": {
-    "print temperature": 160,
+    "print temperature": 240,
     "standby temperature": 100,
-    "heated bed temperature": 40,
+    "heated bed temperature": 43,
     "print cooling": 20.0,
-    "retraction amount": 2.0,
-    "retraction speed": 10,
-    "speed print": 30
+    "retraction amount": 3.0,
+    "retraction speed": 8,
+    "speed print": 20
    }
   },
   {
@@ -843,7 +843,7 @@
     "material_standby_temperature": 175,
     "default_material_bed_temperature": 60,
     "cool_fan_speed": 100.0,
-    "retraction_amount": 3.0,
+    "retraction_amount": 0.85,
     "retraction_speed": 30
    },
    "raw_settings": {
@@ -851,7 +851,7 @@
     "standby temperature": 175,
     "heated bed temperature": 60,
     "print cooling": 100.0,
-    "retraction amount": 3.0,
+    "retraction amount": 0.85,
     "retraction speed": 30,
     "speed print": 60
    }
@@ -892,26 +892,26 @@
    "material": "Sealant",
    "diameter": 1.75,
    "density": 0.95,
-   "print_temperature": 240,
-   "bed_temperature": 50,
+   "print_temperature": 235,
+   "bed_temperature": 100,
    "description": "Синтетический каучук. Специальный материал, который своим свойствам очень близок к настоящей резине, повторяя все её свойства. Предназначен для изготовления кнопок, уплотнителей, амортизаторов.",
    "adhesion_info": "Печать на столе: чистое обезжиренное стекло, для больших деталей нанести клей-адгезив тонким слоем Печать на цилиндрическом основании: наклеить малярный скотч",
    "settings": {
-    "default_material_print_temperature": 240,
+    "default_material_print_temperature": 235,
     "material_standby_temperature": 175,
-    "default_material_bed_temperature": 50,
-    "cool_fan_speed": 0.0,
-    "retraction_amount": 2.0,
-    "retraction_speed": 10
+    "default_material_bed_temperature": 100,
+    "cool_fan_speed": 20.0,
+    "retraction_amount": 0.0,
+    "retraction_speed": 0
    },
    "raw_settings": {
-    "print temperature": 240,
+    "print temperature": 235,
     "standby temperature": 175,
-    "heated bed temperature": 50,
-    "print cooling": 0.0,
-    "retraction amount": 2.0,
-    "retraction speed": 10,
-    "speed print": 40
+    "heated bed temperature": 100,
+    "print cooling": 20.0,
+    "retraction amount": 0.0,
+    "retraction speed": 0,
+    "speed print": 20
    }
   },
   {
@@ -979,26 +979,26 @@
    "material": "Sealant",
    "diameter": 1.75,
    "density": 1.13,
-   "print_temperature": 240,
-   "bed_temperature": 50,
+   "print_temperature": 200,
+   "bed_temperature": 70,
    "description": "Термополиуретан повышенной гибкости. Обладает высокой химической стойкостью к растворам кислот и щелочей, жирам, маслам, ксилолу, дизельному топливу и предназначен для печати уплотнений, прокладок и гибких элементов.",
    "adhesion_info": "Печать на столе: чистое обезжиренное стекло, для больших деталей нанести клей-адгезив тонким слоем Печать на цилиндрическом основании: наклеить малярный скотч",
    "settings": {
-    "default_material_print_temperature": 240,
+    "default_material_print_temperature": 200,
     "material_standby_temperature": 175,
-    "default_material_bed_temperature": 50,
+    "default_material_bed_temperature": 70,
     "cool_fan_speed": 20.0,
     "retraction_amount": 2.0,
     "retraction_speed": 10
    },
    "raw_settings": {
-    "print temperature": 240,
+    "print temperature": 200,
     "standby temperature": 175,
-    "heated bed temperature": 50,
+    "heated bed temperature": 70,
     "print cooling": 20.0,
     "retraction amount": 2.0,
     "retraction speed": 10,
-    "speed print": 30
+    "speed print": 20
    }
   },
   {
@@ -1008,25 +1008,25 @@
    "material": "Sealant",
    "diameter": 1.75,
    "density": 1.15,
-   "print_temperature": 220,
-   "bed_temperature": 50,
+   "print_temperature": 215,
+   "bed_temperature": 45,
    "description": "Гибкий термополиуретан. Обладает высокой химической стойкостью к растворам кислот и щелочей, жирам, маслам, ксилолу, дизельному топливу. Термопластичный полиуретан весьма гигроскопичен, то есть хорошо впитывает влагу. При правильной температуре 3D-печати и использовании сухого материала получаемые изделия будут демонстрировать очень высокую прочность на разрыв. Предназначен для печати уплотнений, прокладок и гибких элементов.",
    "adhesion_info": "Печать на столе: Нанести клей-адгезив на чистое обезжиренное стекло Печать на цилиндрическом основании: Наклеить малярный скотч на основание. Для изделий с толщиной более 3 мм - нанесите на скотч клей-адгезив",
    "settings": {
-    "default_material_print_temperature": 220,
+    "default_material_print_temperature": 215,
     "material_standby_temperature": 175,
-    "default_material_bed_temperature": 50,
+    "default_material_bed_temperature": 45,
     "cool_fan_speed": 20.0,
-    "retraction_amount": 2.0,
-    "retraction_speed": 10
+    "retraction_amount": 5.7,
+    "retraction_speed": 37
    },
    "raw_settings": {
-    "print temperature": 220,
+    "print temperature": 215,
     "standby temperature": 175,
-    "heated bed temperature": 50,
+    "heated bed temperature": 45,
     "print cooling": 20.0,
-    "retraction amount": 2.0,
-    "retraction speed": 10,
+    "retraction amount": 5.7,
+    "retraction speed": 37,
     "speed print": 30
    }
   },
@@ -1065,7 +1065,7 @@
    "label": "Machine Type",
    "type": "str",
    "category": "machine_settings",
-   "default": "Stereotech Hybrid 530 V5.2",
+   "default": "Stereotech Hybrid 530 V5.2.4",
    "settable_per_extruder": false,
    "settable_per_mesh": false
   },
@@ -1082,6 +1082,22 @@
    "type": "str",
    "category": "machine_settings",
    "default": ";STE Slicer 5D Gcode\nSTART\nG1 F200 E15 ;extrude 15 mm of feed stock\nG1 F200 E13.5 ;make retraction\nG92 E0 ;zero the extruded length again\n{coordinate_system};Move to the first coordinate system",
+   "settable_per_extruder": false,
+   "settable_per_mesh": false
+  },
+  "machine_start_basement_gcode": {
+   "label": "Start Basement G-code",
+   "type": "str",
+   "category": "machine_settings",
+   "default": "G56;Set basement coordinate system\nG92 E0\n",
+   "settable_per_extruder": false,
+   "settable_per_mesh": false
+  },
+  "machine_end_basement_gcode": {
+   "label": "End Basement G-code",
+   "type": "str",
+   "category": "machine_settings",
+   "default": "G91\nG0 Z50\nG90\nG54\nG0 X10 Y20 F1200 \nG0 Z200 A0 F600\nG92 E0 C0\nG1 F200 E-2\nG92 E0 ;zero the extruded length again\nG55\nG0 Z0 F600\nG1 F200 E2\nG92 E0 ;zero the extruded length again\n",
    "settable_per_extruder": false,
    "settable_per_mesh": false
   },
@@ -1163,7 +1179,7 @@
    "label": "Machine Width",
    "type": "float",
    "category": "machine_settings",
-   "default": 315,
+   "default": 351,
    "settable_per_extruder": false,
    "settable_per_mesh": false
   },
@@ -1205,7 +1221,7 @@
    "type": "float",
    "category": "machine_settings",
    "default": 300,
-   "value_expr": "300 if resolveOrValue('printing_mode') in ['classic'] else 250",
+   "value_expr": "300 if resolveOrValue('printing_mode') in ['classic'] else 231.1",
    "settable_per_extruder": false,
    "settable_per_mesh": false
   },
@@ -1260,6 +1276,21 @@
    "min_expr": "1",
    "max": 16,
    "max_expr": "16",
+   "settable_per_extruder": false,
+   "settable_per_mesh": false
+  },
+  "machine_kinematics_type": {
+   "label": "Machine 5D Kinematics Type",
+   "type": "enum",
+   "category": "machine_settings",
+   "default": "ac",
+   "options": [
+    "ac",
+    "ac_minus",
+    "bc",
+    "bc_minus",
+    "ab"
+   ],
    "settable_per_extruder": false,
    "settable_per_mesh": false
   },
@@ -1400,60 +1431,42 @@
    "default": [
     [
      [
-      -157.5,
-      150
-     ],
-     [
-      -157.5,
+      -175.5,
       -150
      ],
      [
-      -152.5,
-      -150
+      -175.5,
+      150
      ],
      [
-      -152.5,
+      -169.5,
       150
+     ],
+     [
+      -169.5,
+      -150
      ]
     ],
     [
      [
-      -157.5,
+      175.5,
       -150
      ],
      [
-      -122.5,
+      175.5,
+      150
+     ],
+     [
+      150.5,
+      150
+     ],
+     [
+      150.5,
       -150
-     ],
-     [
-      -122.5,
-      -147
-     ],
-     [
-      -157.5,
-      -147
-     ]
-    ],
-    [
-     [
-      50,
-      -150
-     ],
-     [
-      157.5,
-      -150
-     ],
-     [
-      157.5,
-      -147
-     ],
-     [
-      50,
-      -147
      ]
     ]
    ],
-   "value_expr": "[[[-157.5, 150],[ -157.5, -150],[ -152.5, -150],[-152.5, 150]],[[-157.5,-150],[  -122.5,  -150],[  -122.5,  -147],[  -157.5,  -147]],[  [    50,    -150  ],  [    157.5,    -150  ],  [    157.5,    -147  ],  [    50,    -147  ]]] if resolveOrValue('machine_shape') == 'rectangular' else []",
+   "value_expr": "[[[-175.5, -150], [-175.5, 150], [-169.5, 150], [-169.5, -150]], [[175.5, -150], [175.5, 150], [150.5, 150], [150.5, -150]]] if resolveOrValue('machine_shape') == 'rectangular' else []",
    "settable_per_extruder": false,
    "settable_per_mesh": false
   },
@@ -1787,6 +1800,22 @@
    "settable_per_extruder": false,
    "settable_per_mesh": false
   },
+  "machine_b_axis_multiplier": {
+   "label": "B Axis Multiplier",
+   "type": "float",
+   "category": "machine_settings",
+   "default": 1.0,
+   "settable_per_extruder": false,
+   "settable_per_mesh": false
+  },
+  "machine_b_axis_divider": {
+   "label": "B Axis Divider",
+   "type": "float",
+   "category": "machine_settings",
+   "default": 1.0,
+   "settable_per_extruder": false,
+   "settable_per_mesh": false
+  },
   "machine_c_axis_multiplier": {
    "label": "C Axis Multiplier",
    "type": "float",
@@ -1808,12 +1837,14 @@
    "label": "Printing Mode",
    "type": "enum",
    "category": "printing_mode_category",
-   "default": "classic",
+   "default": "cylindrical_full",
    "options": [
     "classic",
     "cylindrical",
     "cylindrical_full",
-    "discrete"
+    "discrete",
+    "spherical",
+    "spherical_full"
    ],
    "settable_per_extruder": false,
    "settable_per_mesh": false,
@@ -1831,7 +1862,7 @@
    "min_warning_expr": "5",
    "settable_per_extruder": false,
    "settable_per_mesh": false,
-   "enabled_expr": "resolveOrValue('printing_mode') in ['cylindrical', 'cylindrical_full']"
+   "enabled_expr": "resolveOrValue('printing_mode') in ['cylindrical', 'cylindrical_full', 'discrete']"
   },
   "cylindrical_mode_overlap": {
    "label": "Cylindrical Parts Overlap",
@@ -2004,7 +2035,7 @@
    "type": "float",
    "unit": "mm",
    "category": "printing_mode_category",
-   "default": 64,
+   "default": 128,
    "min": 0,
    "min_expr": "0",
    "max": 256,
@@ -2050,7 +2081,7 @@
    "type": "optional_extruder",
    "category": "reinforcement",
    "default": "-1",
-   "value_expr": "1 if any(extruderValues('machine_fiber_extruder')) else -1",
+   "value_expr": "1 if (reinforcement_enabled and any(extruderValues('machine_fiber_extruder'))) else -1",
    "settable_per_extruder": false,
    "settable_per_mesh": false
   },
@@ -2082,7 +2113,8 @@
     "random"
    ],
    "settable_per_extruder": true,
-   "settable_per_mesh": true
+   "settable_per_mesh": true,
+   "enabled_expr": "reinforcement_enabled"
   },
   "reinforcement_min_fiber_line_length": {
    "label": "Minimal Fiber Infill Distance",
@@ -2364,20 +2396,29 @@
    "settable_per_mesh": false,
    "enabled_expr": "reinforcement_enabled_cylindrical and reinforcement_intermediate_layers != 0"
   },
+  "fiber_infill_enabled": {
+   "label": "Enable Fiber Infill",
+   "type": "bool",
+   "category": "reinforcement",
+   "default": false,
+   "value_expr": false,
+   "settable_per_extruder": false,
+   "settable_per_mesh": true,
+   "enabled_expr": "reinforcement_enabled"
+  },
   "fiber_infill_pattern": {
    "label": "Fiber Infill Pattern",
    "type": "enum",
    "category": "reinforcement",
-   "default": "none",
+   "default": "concentric",
    "options": [
     "lines",
     "grid",
-    "concentric",
-    "none"
+    "concentric"
    ],
    "settable_per_extruder": false,
    "settable_per_mesh": true,
-   "enabled_expr": "reinforcement_enabled"
+   "enabled_expr": "reinforcement_enabled and fiber_infill_enabled"
   },
   "fiber_infill_pattern_classic": {
    "label": "Classic Infill Pattern",
@@ -2387,7 +2428,7 @@
    "value_expr": "[0 if fiber_infill_pattern == 'lines'  else (1 if fiber_infill_pattern == 'grid' else 2)]",
    "settable_per_extruder": false,
    "settable_per_mesh": true,
-   "enabled_expr": "reinforcement_enabled_classic and fiber_infill_pattern!= 'none'"
+   "enabled_expr": "fiber_infill_enabled and reinforcement_enabled_classic"
   },
   "fiber_infill_pattern_cylindrical": {
    "label": "Cylindrical Infill Pattern",
@@ -2397,7 +2438,7 @@
    "value_expr": "[0 if fiber_infill_pattern == 'lines'  else (1 if fiber_infill_pattern == 'grid' else 2)]",
    "settable_per_extruder": false,
    "settable_per_mesh": true,
-   "enabled_expr": "reinforcement_enabled_cylindrical and fiber_infill_pattern!= 'none'"
+   "enabled_expr": "fiber_infill_enabled and reinforcement_enabled_cylindrical"
   },
   "fiber_infill_angles": {
    "label": "Fiber Infill Line Directions",
@@ -2406,7 +2447,7 @@
    "default": 45,
    "settable_per_extruder": false,
    "settable_per_mesh": false,
-   "enabled_expr": "reinforcement_enabled and fiber_infill_pattern!= 'none'"
+   "enabled_expr": "reinforcement_enabled and fiber_infill_enabled"
   },
   "fiber_infill_angles_classic": {
    "label": "Classic Infill Angle",
@@ -2416,7 +2457,7 @@
    "value_expr": "[fiber_infill_angles]",
    "settable_per_extruder": false,
    "settable_per_mesh": false,
-   "enabled_expr": "reinforcement_enabled_classic and fiber_infill_pattern!= 'none'"
+   "enabled_expr": "fiber_infill_enabled and reinforcement_enabled_classic"
   },
   "fiber_infill_angles_cylindrical": {
    "label": "Cylindrical Infill Angle",
@@ -2426,7 +2467,7 @@
    "value_expr": "[fiber_infill_angles]",
    "settable_per_extruder": false,
    "settable_per_mesh": false,
-   "enabled_expr": "reinforcement_enabled_cylindrical and fiber_infill_pattern != 'none'"
+   "enabled_expr": "fiber_infill_enabled and reinforcement_enabled_cylindrical"
   },
   "fiber_density": {
    "label": "Fiber Density",
@@ -2438,9 +2479,9 @@
    "min_expr": "0",
    "max_warning": 100,
    "max_warning_expr": "100",
-   "settable_per_extruder": false,
+   "settable_per_extruder": true,
    "settable_per_mesh": false,
-   "enabled_expr": "reinforcement_enabled and fiber_infill_pattern!= 'none'"
+   "enabled_expr": "reinforcement_enabled and fiber_infill_enabled"
   },
   "fiber_density_classic": {
    "label": "Classic Fiber Density",
@@ -2455,7 +2496,7 @@
    "max_warning_expr": "100",
    "settable_per_extruder": true,
    "settable_per_mesh": false,
-   "enabled_expr": "reinforcement_enabled_classic and fiber_infill_pattern!= 'none'"
+   "enabled_expr": "fiber_infill_enabled and reinforcement_enabled_classic"
   },
   "fiber_line_distance_classic": {
    "label": "Classic Line Distance",
@@ -2463,14 +2504,14 @@
    "unit": "mm",
    "category": "reinforcement",
    "default": 0,
-   "value_expr": "0 if fiber_density == 0 else (fiber_infill_line_width * 100) / fiber_density_classic * (2 if infill_pattern == 'grid' else (3 if infill_pattern == 'triangles' or infill_pattern == 'trihexagon' or infill_pattern == 'cubic' or infill_pattern == 'cubicsubdiv' else (2 if infill_pattern == 'tetrahedral' or infill_pattern == 'quarter_cubic' else (1 if infill_pattern == 'cross' or infill_pattern == 'cross_3d' else 1))))",
+   "value_expr": "0 if fiber_density == 0 else round((fiber_infill_line_width * 100) / fiber_density_classic * (2 if fiber_infill_pattern == 'grid' else 1),2)",
    "min": 0,
    "min_expr": "0",
    "min_warning": 1.2,
    "min_warning_expr": "fiber_infill_line_width",
    "settable_per_extruder": true,
    "settable_per_mesh": false,
-   "enabled_expr": "reinforcement_enabled_classic and fiber_infill_pattern!= 'none'"
+   "enabled_expr": "fiber_infill_enabled and reinforcement_enabled_classic"
   },
   "fiber_density_cylindrical": {
    "label": "Cylindrical Fiber Density ",
@@ -2485,7 +2526,7 @@
    "max_warning_expr": "100",
    "settable_per_extruder": true,
    "settable_per_mesh": false,
-   "enabled_expr": "reinforcement_enabled_cylindrical and fiber_infill_pattern!= 'none'"
+   "enabled_expr": "fiber_infill_enabled and reinforcement_enabled_cylindrical"
   },
   "fiber_line_distance_cylindrical": {
    "label": "Cylindrical Line Distance",
@@ -2493,23 +2534,23 @@
    "unit": "mm",
    "category": "reinforcement",
    "default": 2,
-   "value_expr": "[0 if fiber_density == 0 else (fiber_infill_line_width * 100) / fiber_density_cylindrical * (2 if infill_pattern == 'grid' else (3 if infill_pattern == 'triangles' or infill_pattern == 'trihexagon' or infill_pattern == 'cubic' or infill_pattern == 'cubicsubdiv' else (2 if infill_pattern == 'tetrahedral' or infill_pattern == 'quarter_cubic' else (1 if infill_pattern == 'cross' or infill_pattern == 'cross_3d' else 1))))]",
+   "value_expr": "[0 if fiber_density_cylindrical == 0 else round((fiber_infill_line_width * 100) / fiber_density_cylindrical * (2 if fiber_infill_pattern == 'grid' else 1), 2)]",
    "min": 0,
    "min_expr": "0",
    "min_warning": 1.2,
    "min_warning_expr": "fiber_infill_line_width",
    "settable_per_extruder": true,
    "settable_per_mesh": false,
-   "enabled_expr": "reinforcement_enabled_cylindrical and fiber_infill_pattern!= 'none'"
+   "enabled_expr": "fiber_infill_enabled and reinforcement_enabled_cylindrical"
   },
   "fiber_infill_round_connect": {
    "label": "Connect Fiber Infill Lines",
    "type": "bool",
    "category": "reinforcement",
-   "default": false,
+   "default": true,
    "settable_per_extruder": false,
    "settable_per_mesh": false,
-   "enabled_expr": "reinforcement_enabled and fiber_infill_pattern!= 'none'"
+   "enabled_expr": "reinforcement_enabled and fiber_infill_enabled"
   },
   "fiber_infill_round_connect_classic": {
    "label": "Connect Infill Lines Classic",
@@ -2519,7 +2560,7 @@
    "value_expr": "[1 if fiber_infill_round_connect else 0]",
    "settable_per_extruder": false,
    "settable_per_mesh": false,
-   "enabled_expr": "reinforcement_enabled_classic and fiber_infill_pattern!= 'none' and fiber_infill_round_connect"
+   "enabled_expr": "fiber_infill_enabled and reinforcement_enabled_classic and fiber_infill_round_connect"
   },
   "fiber_infill_round_connect_cylindrical": {
    "label": "Connect Infill Lines Cylindrical",
@@ -2529,7 +2570,7 @@
    "value_expr": "[1 if fiber_infill_round_connect else 0]",
    "settable_per_extruder": false,
    "settable_per_mesh": false,
-   "enabled_expr": "reinforcement_enabled_cylindrical and fiber_infill_pattern!= 'none' and fiber_infill_round_connect"
+   "enabled_expr": "fiber_infill_enabled and reinforcement_enabled_cylindrical and fiber_infill_round_connect"
   },
   "layer_height": {
    "label": "Layer Height",
@@ -2720,7 +2761,7 @@
    "max_warning": 1.2,
    "max_warning_expr": "3 * machine_nozzle_size",
    "settable_per_extruder": true,
-   "settable_per_mesh": false,
+   "settable_per_mesh": true,
    "enabled_expr": "infill_sparse_density > 0 and reinforcement_enabled"
   },
   "skirt_brim_line_width": {
@@ -2837,6 +2878,42 @@
    "max_warning_expr": "150",
    "settable_per_extruder": true,
    "settable_per_mesh": false
+  },
+  "segment_length": {
+   "label": "Segment Length",
+   "type": "float",
+   "unit": "mm",
+   "category": "resolution",
+   "default": 0.02,
+   "min": 0,
+   "min_expr": "0",
+   "max": 0.4,
+   "max_expr": "line_width",
+   "min_warning": -1,
+   "min_warning_expr": "-1",
+   "max_warning": 0.4,
+   "max_warning_expr": "line_width",
+   "settable_per_extruder": true,
+   "settable_per_mesh": true,
+   "enabled_expr": "resolveOrValue('printing_mode') in ['cylindrical', 'cylindrical_full']"
+  },
+  "export_segment_length": {
+   "label": "Output Segment Length",
+   "type": "float",
+   "unit": "mm",
+   "category": "resolution",
+   "default": 0.02,
+   "min": 0,
+   "min_expr": "0",
+   "max": 0.4,
+   "max_expr": "line_width",
+   "min_warning": -1,
+   "min_warning_expr": "-1",
+   "max_warning": 0.4,
+   "max_warning_expr": "line_width",
+   "settable_per_extruder": true,
+   "settable_per_mesh": true,
+   "enabled_expr": "resolveOrValue('printing_mode') in ['cylindrical', 'cylindrical_full']"
   },
   "wall_extruder_nr": {
    "label": "Wall Extruder",
@@ -3887,7 +3964,7 @@
    "type": "float",
    "unit": "°C",
    "category": "material",
-   "default": 0,
+   "default": 40,
    "min": -273.15,
    "min_expr": "-273.15",
    "min_warning": 0,
@@ -3897,6 +3974,71 @@
    "settable_per_extruder": false,
    "settable_per_mesh": false,
    "enabled_expr": "machine_heated_build_volume"
+  },
+  "machine_heated_build_volume_enabled": {
+   "label": "Enable Build Volume Temperature Stabilization",
+   "type": "bool",
+   "category": "material",
+   "default": false,
+   "settable_per_extruder": false,
+   "settable_per_mesh": false,
+   "enabled_expr": "machine_heated_build_volume"
+  },
+  "build_volume_align_velocity": {
+   "label": "Build Volume Align Velocity",
+   "type": "float",
+   "unit": "°C/h",
+   "category": "material",
+   "default": 60,
+   "min": 0,
+   "min_expr": "0",
+   "max_warning": 300,
+   "max_warning_expr": "300",
+   "settable_per_extruder": false,
+   "settable_per_mesh": false,
+   "enabled_expr": "machine_heated_build_volume_enabled"
+  },
+  "build_volume_cooling_velocity": {
+   "label": "Build Volume Cooling Velocity",
+   "type": "float",
+   "unit": "°C/h",
+   "category": "material",
+   "default": 60,
+   "min": 0,
+   "min_expr": "0",
+   "max_warning": 300,
+   "max_warning_expr": "300",
+   "settable_per_extruder": false,
+   "settable_per_mesh": false,
+   "enabled_expr": "machine_heated_build_volume_enabled"
+  },
+  "build_volume_align_temperature_step": {
+   "label": "Build Volume Align Temperature Step",
+   "type": "float",
+   "unit": "°C",
+   "category": "material",
+   "default": 1,
+   "min": 1,
+   "min_expr": "1",
+   "max_warning": 300,
+   "max_warning_expr": "300",
+   "settable_per_extruder": false,
+   "settable_per_mesh": false,
+   "enabled_expr": "machine_heated_build_volume_enabled"
+  },
+  "build_volume_cooling_temperature_step": {
+   "label": "Build Volume Cooling Temperature Step",
+   "type": "float",
+   "unit": "°C",
+   "category": "material",
+   "default": 1,
+   "min": 1,
+   "min_expr": "1",
+   "max_warning": 300,
+   "max_warning_expr": "300",
+   "settable_per_extruder": false,
+   "settable_per_mesh": false,
+   "enabled_expr": "machine_heated_build_volume_enabled"
   },
   "material_print_temperature": {
    "label": "Printing Temperature",
@@ -4340,7 +4482,7 @@
    "type": "float",
    "unit": "mm",
    "category": "material",
-   "default": 3,
+   "default": 1,
    "min_warning": -0.0001,
    "min_warning_expr": "-0.0001",
    "max_warning": 10.0,
@@ -4354,7 +4496,7 @@
    "type": "float",
    "unit": "mm/s",
    "category": "material",
-   "default": 25,
+   "default": 40,
    "min": 0.0001,
    "min_expr": "0.0001",
    "max": 45,
@@ -4372,7 +4514,7 @@
    "type": "float",
    "unit": "mm/s",
    "category": "material",
-   "default": 25,
+   "default": 40,
    "value_expr": "retraction_speed",
    "min": 0.0001,
    "min_expr": "0.0001",
@@ -4391,7 +4533,7 @@
    "type": "float",
    "unit": "mm/s",
    "category": "material",
-   "default": 25,
+   "default": 40,
    "value_expr": "retraction_speed",
    "min": 0.0001,
    "min_expr": "0.0001",
@@ -4458,7 +4600,7 @@
    "value_expr": "retraction_amount",
    "min": 0,
    "min_expr": "0",
-   "max_warning": 6,
+   "max_warning": 2,
    "max_warning_expr": "retraction_amount * 2",
    "settable_per_extruder": true,
    "settable_per_mesh": false,
@@ -5894,7 +6036,7 @@
    "unit": "mm",
    "category": "travel",
    "default": 0.0,
-   "min": -157.5,
+   "min": -175.5,
    "min_expr": "machine_width / -2 if machine_center_is_zero else 0",
    "settable_per_extruder": true,
    "settable_per_mesh": false
@@ -6389,6 +6531,33 @@
    "settable_per_mesh": true,
    "enabled_expr": "support_enable and printing_mode in ['cylindrical_full']"
   },
+  "top_support_type": {
+   "label": "Top Support Placement",
+   "type": "enum",
+   "category": "support",
+   "default": "everywhere",
+   "options": [
+    "buildplate",
+    "everywhere"
+   ],
+   "settable_per_extruder": false,
+   "settable_per_mesh": false,
+   "enabled_expr": "support_enable_top_support"
+  },
+  "top_support_height": {
+   "label": "Top Support Height",
+   "type": "float",
+   "unit": "mm",
+   "category": "support",
+   "default": 10,
+   "min": 0,
+   "min_expr": "0",
+   "min_warning": 5,
+   "min_warning_expr": "5",
+   "settable_per_extruder": false,
+   "settable_per_mesh": false,
+   "enabled_expr": "top_support_type == 'buildplate'"
+  },
   "support_angle": {
    "label": "Support Overhang Angle",
    "type": "float",
@@ -6427,13 +6596,37 @@
    "type": "int",
    "category": "support",
    "default": 1,
-   "value_expr": "1 if (support_pattern == 'grid' or support_pattern == 'triangles' or support_pattern == 'concentric') else 0",
+   "value_expr": "1 if (support_pattern == 'grid' or support_pattern == 'triangles' or support_pattern == 'concentric' or printing_mode != 'classic') else 0",
    "min": 0,
    "min_expr": "0",
    "min_warning": 0,
    "min_warning_expr": "1 if support_pattern == 'concentric' else 0",
    "max_warning": 3,
    "max_warning_expr": "3",
+   "settable_per_extruder": true,
+   "settable_per_mesh": false,
+   "enabled_expr": "support_enable"
+  },
+  "support_intermediate_layers": {
+   "label": "Support Intermediate Layers Count",
+   "type": "int",
+   "category": "support",
+   "default": 0,
+   "value_expr": "0",
+   "min": 0,
+   "min_expr": "0",
+   "settable_per_extruder": true,
+   "settable_per_mesh": false,
+   "enabled_expr": "support_enable"
+  },
+  "support_intermediate_step": {
+   "label": "Support Intermediate Layers Step",
+   "type": "int",
+   "category": "support",
+   "default": 0,
+   "value_expr": "0",
+   "min": 0,
+   "min_expr": "0",
    "settable_per_extruder": true,
    "settable_per_mesh": false,
    "enabled_expr": "support_enable"
@@ -6660,7 +6853,7 @@
    "type": "float",
    "unit": "mm",
    "category": "support",
-   "default": 0.7,
+   "default": 0.2,
    "min": 0,
    "min_expr": "0",
    "max_warning": 1.5,
@@ -7164,11 +7357,11 @@
    "default": 0,
    "min": 0,
    "min_expr": "0",
-   "max": 315,
+   "max": 351,
    "max_expr": "machine_width",
-   "min_warning": -157.5,
+   "min_warning": -175.5,
    "min_warning_expr": "machine_width / -2 if machine_center_is_zero else 0",
-   "max_warning": 157.5,
+   "max_warning": 175.5,
    "max_warning_expr": "machine_width / 2 if machine_center_is_zero else machine_width",
    "settable_per_extruder": true,
    "settable_per_mesh": false
@@ -7195,6 +7388,7 @@
    "type": "enum",
    "category": "platform_adhesion",
    "default": "brim",
+   "value_expr": "'raft' if printing_mode in ['cylindrical_full'] else 'brim'",
    "options": [
     "skirt",
     "brim",
@@ -7309,8 +7503,8 @@
    "unit": "mm",
    "category": "platform_adhesion",
    "default": 15,
-   "value_expr": "15 if resolveOrValue('printing_mode') == 'classic' else 0",
-   "min_warning": 0.7,
+   "value_expr": "15 if resolveOrValue('printing_mode') == 'classic' else resolveOrValue('line_width') if resolveOrValue('cylindrical_mode_base_diameter') == resolveOrValue('non_printing_base_diameter') and resolveOrValue('printing_mode') in ['discrete', 'cylindrical_full', 'spherical_full','conical_full'] else 0",
+   "min_warning": 0,
    "min_warning_expr": "resolveOrValue('raft_interface_line_width') if resolveOrValue('printing_mode') == 'classic' else 0",
    "max_warning": 20,
    "max_warning_expr": "20",
@@ -7397,11 +7591,12 @@
    "default": 0.1,
    "value_expr": "resolveOrValue('raft_total_height') - resolveOrValue('raft_base_thickness') - resolveOrValue('raft_surface_thickness')",
    "min": 0.0,
+   "min_expr": "0.0",
    "max_warning": 40,
    "max_warning_expr": "40",
    "settable_per_extruder": true,
    "settable_per_mesh": true,
-   "enabled_expr": "resolveOrValue('adhesion_type') == 'raft' and  resolveOrValue('printing_mode') in ['classic', 'cylindrical_full']"
+   "enabled_expr": "resolveOrValue('adhesion_type') == 'raft' and  resolveOrValue('printing_mode') in ['classic', 'cylindrical_full','discrete']"
   },
   "raft_interface_layers": {
    "label": "Raft Middle Layers",
@@ -7415,7 +7610,7 @@
    "max_warning_expr": "20",
    "settable_per_extruder": true,
    "settable_per_mesh": false,
-   "enabled_expr": "resolveOrValue('adhesion_type') == 'raft' and  resolveOrValue('printing_mode') in ['classic', 'cylindrical_full']"
+   "enabled_expr": "resolveOrValue('adhesion_type') == 'raft' and  resolveOrValue('printing_mode') in ['classic', 'cylindrical_full','discrete']"
   },
   "raft_surface_thickness": {
    "label": "Raft Top Layer Thickness",
@@ -7560,8 +7755,8 @@
    "category": "platform_adhesion",
    "default": 1.6,
    "value_expr": "raft_base_line_width * 2",
-   "min": 0,
-   "min_expr": "0",
+   "min": 0.0001,
+   "min_expr": "0.0001",
    "min_warning": 0.8,
    "min_warning_expr": "raft_base_line_width",
    "max_warning": 100,
@@ -7570,14 +7765,37 @@
    "settable_per_mesh": false,
    "enabled_expr": "resolveOrValue('adhesion_type') == 'raft'"
   },
-  "cylindrical_raft_enabled": {
-   "label": "Print cylindrical raft",
-   "type": "bool",
+  "cylindrical_raft_type": {
+   "label": "Cylindrical Raft Type",
+   "type": "enum",
    "category": "platform_adhesion",
-   "default": true,
-   "value_expr": "machine_five_axis and not (resolveOrValue('printing_mode') == 'classic' and machine_hybrid) and resolveOrValue('printing_mode') in ['discrete', 'cylindrical_full', 'spherical_full','conical_full']",
+   "default": "none",
+   "value_expr": "'solid' if not (resolveOrValue('printing_mode') == 'classic' and machine_hybrid) and resolveOrValue('printing_mode') in ['discrete', 'cylindrical_full', 'spherical_full','conical_full'] else 'none'",
+   "options": [
+    "solid",
+    "continuous",
+    "gapped",
+    "none"
+   ],
    "settable_per_extruder": false,
    "settable_per_mesh": false
+  },
+  "cylindrical_raft_gap": {
+   "label": "Cylindrical Raft Gap",
+   "type": "float",
+   "unit": "mm",
+   "category": "platform_adhesion",
+   "default": 0.3,
+   "value_expr": "line_width",
+   "min": 0.001,
+   "min_expr": "0.001",
+   "min_warning": 0.04,
+   "min_warning_expr": "machine_nozzle_size * 0.1",
+   "max_warning": 0.8,
+   "max_warning_expr": "machine_nozzle_size * 2",
+   "settable_per_extruder": true,
+   "settable_per_mesh": false,
+   "enabled_expr": "resolveOrValue('cylindrical_raft_type') == 'gapped'"
   },
   "cylindrical_raft_extruder_nr": {
    "label": "Cylindrical Raft Extruder",
@@ -7587,7 +7805,7 @@
    "value_expr": "defaultExtruderPosition()",
    "settable_per_extruder": false,
    "settable_per_mesh": false,
-   "enabled_expr": "extruders_enabled_count > 1 and cylindrical_raft_enabled"
+   "enabled_expr": "extruders_enabled_count > 1 and resolveOrValue('cylindrical_raft_type') != 'none'"
   },
   "cylindrical_raft_thickness": {
    "label": "C.R. Layer Thickness",
@@ -7604,7 +7822,7 @@
    "max_warning_expr": "0.75 * raft_base_line_width",
    "settable_per_extruder": false,
    "settable_per_mesh": false,
-   "enabled_expr": "cylindrical_raft_enabled"
+   "enabled_expr": "resolveOrValue('cylindrical_raft_type') != 'none'"
   },
   "cylindrical_raft_diameter": {
    "label": "Cylindrical Raft diameter",
@@ -7621,7 +7839,7 @@
    "max_warning_expr": "50",
    "settable_per_extruder": false,
    "settable_per_mesh": false,
-   "enabled_expr": "cylindrical_raft_enabled"
+   "enabled_expr": "resolveOrValue('cylindrical_raft_type') != 'none'"
   },
   "cylindrical_raft_base_height": {
    "label": "Cylindrical Raft height",
@@ -7637,7 +7855,7 @@
    "max_warning_expr": "50",
    "settable_per_extruder": false,
    "settable_per_mesh": false,
-   "enabled_expr": "cylindrical_raft_enabled"
+   "enabled_expr": "resolveOrValue('cylindrical_raft_type') != 'none'"
   },
   "raft_speed": {
    "label": "Raft Print Speed",
@@ -7959,9 +8177,9 @@
    "category": "dual",
    "default": 200,
    "value_expr": "machine_width - max(extruderValue(adhesion_extruder_nr, 'brim_width') * extruderValue(adhesion_extruder_nr, 'initial_layer_line_width_factor') / 100 if adhesion_type == 'brim' else (extruderValue(adhesion_extruder_nr, 'raft_margin') if adhesion_type == 'raft' else (extruderValue(adhesion_extruder_nr, 'skirt_gap') if adhesion_type == 'skirt' else 0)), max(extruderValues('travel_avoid_distance'))) - max(extruderValues('support_offset')) - sum(extruderValues('skirt_brim_line_width')) * extruderValue(adhesion_extruder_nr, 'initial_layer_line_width_factor') / 100 - (resolveOrValue('draft_shield_dist') if resolveOrValue('draft_shield_enabled') else 0) - 1",
-   "min": -137.5,
+   "min": -155.5,
    "min_expr": "resolveOrValue('prime_tower_size') - machine_width / 2 if machine_center_is_zero else resolveOrValue('prime_tower_size')",
-   "max": 157.5,
+   "max": 175.5,
    "max_expr": "machine_width / 2 if machine_center_is_zero else machine_width",
    "settable_per_extruder": false,
    "settable_per_mesh": false,
@@ -8207,6 +8425,14 @@
   },
   "anti_overhang_mesh": {
    "label": "Anti Overhang Mesh",
+   "type": "bool",
+   "category": "blackmagic",
+   "default": false,
+   "settable_per_extruder": false,
+   "settable_per_mesh": true
+  },
+  "splitting_mesh": {
+   "label": "Splitting Mesh",
    "type": "bool",
    "category": "blackmagic",
    "default": false,

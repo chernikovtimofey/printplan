@@ -1,7 +1,7 @@
 {
  "version": 1,
  "reviewed": false,
- "notes": "Task–Material–Process graph for Stereotech Hybrid 530 V5.2. Edge weights and numeric attributes are a draft: Stereotech profile descriptions (resources/materials/*.xml.fdm_material) plus typical datasheet values for the polymer family. Density comes from the slicer profiles and is reliable; everything else needs a manual review (python -m printplan kg-report).",
+ "notes": "Task–Material–Process graph for Stereotech Hybrid 530 V5.2.4. Edge weights and numeric attributes are a draft: Stereotech profile descriptions (resources/materials/*.xml.fdm_material) plus typical datasheet values for the polymer family. Density comes from the slicer profiles and is reliable; everything else needs a manual review (python -m printplan kg-report).",
 
  "properties": {
   "strength":        {"label": "прочность"},

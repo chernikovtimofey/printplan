@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Assistant · STE Slicer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 3 7v10l9 5 9-5V7l-9-5Zm0 2.3 6.8 3.8L12 11.9 5.2 8.1 12 4.3ZM5 9.8l6 3.4v6.6l-6-3.4V9.8Zm8 10V13.2l6-3.4v6.6l-6 3.4Z"/></svg>
+      <div>
+        <div class="brand-title">AI Assistant</div>
+        <div class="brand-sub">STE Slicer · Stereotech Hybrid 530</div>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <span id="llm-status" class="chip">…</span>
+      <button id="btn-new" class="btn ghost" type="button" title="Начать новый диалог">Новый диалог</button>
+      <button id="btn-settings" class="btn ghost icon" type="button" title="Настройки" aria-label="Настройки">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.4 13a7.6 7.6 0 0 0 0-2l2-1.6-2-3.4-2.4 1a7.4 7.4 0 0 0-1.7-1L15 3.5h-4l-.4 2.5a7.4 7.4 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.6a7.6 7.6 0 0 0 0 2l-2 1.6 2 3.4 2.4-1a7.4 7.4 0 0 0 1.7 1l.4 2.5h4l.4-2.5a7.4 7.4 0 0 0 1.7-1l2.4 1 2-3.4-2-1.6ZM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z" transform="translate(-1 0)"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="timeline" class="timeline" aria-live="polite">
+    <section id="welcome" class="welcome">
+      <h1>Подготовлю модель к печати</h1>
+      <p>Прикрепите модель (STL, OBJ, 3MF) и опишите задачу: для чего деталь, где она работает, какие к ней требования.
+        Можно приложить техническое задание (.docx) и фото. Я выберу режим 3D или 5D, профиль, материал, настройки и
+        ориентацию, нарежу модель и объясню решения.</p>
+      <div class="examples">
+        <button class="example" type="button">Кронштейн под нагрузку, PETG, без поддержек</button>
+        <button class="example" type="button">Втулка для работы в горячем масле, точная посадка на вал</button>
+        <button class="example" type="button">Декоративная фигурка на полку, без видимых слоёв</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="composer" id="composer">
+    <div id="attachments" class="attachments"></div>
+    <div class="composer-row">
+      <button id="btn-attach" class="btn ghost icon" type="button" title="Прикрепить файл" aria-label="Прикрепить файл">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.5 6.5v10a4.5 4.5 0 0 1-9 0V5a3 3 0 0 1 6 0v10.5a1.5 1.5 0 0 1-3 0V6.5H9v9a3 3 0 0 0 6 0V5a4.5 4.5 0 0 0-9 0v11.5a6 6 0 0 0 12 0v-10h-1.5Z"/></svg>
+      </button>
+      <input id="file-input" type="file" multiple hidden accept=".stl,.obj,.3mf,.jpg,.jpeg,.png,.docx,.txt,.md">
+      <textarea id="input" rows="1" placeholder="Опишите задачу печати… (Enter — отправить, Shift+Enter — новая строка)"></textarea>
+      <button id="btn-send" class="btn primary" type="button">Отправить</button>
+    </div>
+  </footer>
+
+  <div id="drop-overlay" class="drop-overlay" hidden>Отпустите файлы, чтобы прикрепить</div>
+
+  <div id="settings" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <form id="settings-form" class="modal-card">
+      <h2 id="settings-title">Настройки</h2>
+      <label>Адрес API (OpenAI-совместимый)
+        <input name="base_url" type="url" required>
+      </label>
+      <label>Модель
+        <input name="model" type="text" required>
+      </label>
+      <label>Ключ API
+        <input name="api_key" type="password" autocomplete="off" placeholder="не задан">
+        <span class="hint" id="key-hint">Ключ хранится в настройках слайсера и не показывается.</span>
+      </label>
+      <label>Папка для G-code и проектов
+        <input name="output_dir" type="text">
+      </label>
+      <label>Порт локального сервера
+        <input name="port" type="number" min="1024" max="65535">
+        <span class="hint">Новый порт применится после перезапуска слайсера.</span>
+      </label>
+      <p class="hint" id="mcp-hint"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn ghost" id="settings-cancel">Отмена</button>
+        <button type="submit" class="btn primary">Сохранить</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

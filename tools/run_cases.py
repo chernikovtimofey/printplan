@@ -21,7 +21,10 @@ import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-sys.path.insert(0, os.path.join(ROOT, "plugin", "AIAssistant"))
+_PRINTPLAN_PARENT = os.path.join(ROOT, "plugin", "AIAssistant")
+if _PRINTPLAN_PARENT not in sys.path:
+    # appended, not prepended: in front it would shadow the AIAssistant package with AIAssistant.py
+    sys.path.append(_PRINTPLAN_PARENT)
 
 from printplan import pipeline  # noqa: E402
 from printplan.__main__ import dumps  # noqa: E402

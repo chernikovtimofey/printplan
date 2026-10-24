@@ -4,6 +4,8 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, os.path.join(ROOT, "plugin", "AIAssistant"))
+# The plugin package itself (AIAssistant.agent uses relative imports into AIAssistant.printplan).
+sys.path.insert(0, os.path.join(ROOT, "plugin"))
 sys.path.insert(0, HERE)
 
 import pytest  # noqa: E402

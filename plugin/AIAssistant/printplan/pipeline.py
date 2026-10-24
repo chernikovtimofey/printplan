@@ -76,9 +76,10 @@ def run(task, triangles=None, stl_path=None, llm=None, ctx=None, images=None, on
             OrderedDict([("F_mesh", mesh.F_mesh), ("Q_topo", mesh.Q_topo)]))
         rot = symmetry.analyze(mesh)
         parse, parse_meta = f_text.result()
-    trace.emit("1", "done", "Ограничения: %s; флаги: %s" % (
-        dict((k, v) for k, v in parse["constraints"].items() if v not in (None, "unspecified")),
-        ", ".join("%s=%.1f" % (k, v["strength"]) for k, v in parse["flags"].items())),
+    constraints = ["%s=%s" % (k, v) for k, v in parse["constraints"].items() if v not in (None, "unspecified")]
+    trace.emit("1", "done", "Явные ограничения: %s; флаги: %s" % (
+        ", ".join(constraints) or "нет",
+        ", ".join("%s=%.1f" % (k, v["strength"]) for k, v in parse["flags"].items()) or "нет"),
         OrderedDict([("parse", parse), ("meta", parse_meta)]))
 
     # Stage 3.

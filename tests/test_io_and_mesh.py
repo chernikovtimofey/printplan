@@ -24,7 +24,7 @@ def test_ascii_stl(tmpdir):
     for t in tris:
         lines.append("facet normal 0 0 0\n outer loop")
         for v in t:
-            lines.append("  vertex %r %r %r" % tuple(v))
+            lines.append("  vertex %.6f %.6f %.6f" % tuple(v))
         lines.append(" endloop\nendfacet")
     lines.append("endsolid test")
     path = str(tmpdir.join("ascii.stl"))

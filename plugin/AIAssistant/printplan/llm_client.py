@@ -108,6 +108,31 @@ class LLMClient(object):
 
     # ------------------------------------------------------------------ structured output
 
+    def chat_tools(self, messages, tools, extra_body=None, on_progress=None):
+        """One turn of a tool-using conversation (the model decides whether to call tools).
+
+        Returns (assistant message dict, meta). The message has "content" and,
+        when the model calls tools, "tool_calls" in the OpenAI format (each with
+        an "id" to answer with a role="tool" message).
+        """
+        response = self.chat(messages, tools=tools or None, tool_choice="auto" if tools else None,
+                             extra_body=extra_body, on_progress=on_progress)
+        message = dict(_message(response))
+        message["role"] = "assistant"
+        calls = []
+        for i, call in enumerate(message.get("tool_calls") or []):
+            call = dict(call)
+            call["id"] = call.get("id") or "call_%d" % i
+            call["type"] = "function"
+            calls.append(call)
+        if calls:
+            message["tool_calls"] = calls
+        else:
+            message.pop("tool_calls", None)
+        meta = OrderedDict([("model", self.model), ("elapsed_s", response.get("_elapsed_s")),
+                            ("usage", response.get("usage"))])
+        return message, meta
+
     def call_tool(self, messages, name, description, parameters, extra_body=None, on_progress=None):
         """Force a call of function `name`; return (arguments dict, meta dict)."""
         tool = {"type": "function", "function": {"name": name, "description": description,
@@ -156,6 +181,7 @@ def _read_stream(resp, started, deadline, on_progress=None):
             raise LLMError("LLM API error: %s" % (chunk["error"],))
         if chunk.get("usage"):
             usage = chunk["usage"]
+        text_delta = ""
         for choice in chunk.get("choices") or []:
             delta = choice.get("delta") or {}
             finish = choice.get("finish_reason") or finish
@@ -163,9 +189,12 @@ def _read_stream(resp, started, deadline, on_progress=None):
                 reasoning += len(delta["reasoning_content"])
             if delta.get("content"):
                 content.append(delta["content"])
+                text_delta += delta["content"]
             for tc in delta.get("tool_calls") or []:
                 idx = tc.get("index", 0)
                 call = calls.setdefault(idx, {"type": "function", "function": {"name": None, "arguments": ""}})
+                if tc.get("id"):
+                    call["id"] = tc["id"]
                 fn = tc.get("function") or {}
                 if fn.get("name"):
                     call["function"]["name"] = fn["name"]
@@ -176,7 +205,8 @@ def _read_stream(resp, started, deadline, on_progress=None):
                 on_progress(OrderedDict([
                     ("elapsed_s", round(time.time() - started, 1)), ("reasoning_chars", reasoning),
                     ("answer_chars", sum(len(c) for c in content) +
-                     sum(len(c["function"]["arguments"]) for c in calls.values()))]))
+                     sum(len(c["function"]["arguments"]) for c in calls.values())),
+                    ("text_delta", text_delta)]))
             except Exception:
                 pass
         if deadline and time.time() - started > deadline:
@@ -189,18 +219,19 @@ def _read_stream(resp, started, deadline, on_progress=None):
 
 
 def stage_options(model, stage):
-    """Provider-specific request options per stage.
+    """Provider-specific request options per stage (1, 6 or "agent").
 
     Qwen models on DashScope-compatible APIs think before answering; the
-    extraction of stage 1 does not need it, and stage 6 gets a bounded budget
-    (measured: 129 s unbounded vs ~40 s with the budget). Override with
-    STE_LLM_STAGE1_EXTRA / STE_LLM_STAGE6_EXTRA (JSON); "{}" disables.
+    extraction of stage 1 and the chat agent's tool choice do not need it, and
+    stage 6 gets a bounded budget (measured: 129 s unbounded vs ~40 s with the
+    budget). Override with STE_LLM_STAGE1_EXTRA / STE_LLM_STAGE6_EXTRA /
+    STE_LLM_AGENT_EXTRA (JSON); "{}" disables.
     """
-    env = os.environ.get("STE_LLM_STAGE%d_EXTRA" % stage)
+    env = os.environ.get("STE_LLM_%s_EXTRA" % ("STAGE%s" % stage if stage in (1, 6) else str(stage).upper()))
     if env is not None:
         return json.loads(env)
     if model and "qwen" in model.lower():
-        return {"enable_thinking": False} if stage == 1 else {"thinking_budget": 1024}
+        return {"thinking_budget": 1024} if stage == 6 else {"enable_thinking": False}
     return {}
 
 
@@ -256,6 +287,26 @@ class ScriptedLLM(object):
         self.responses = list(responses)
         self.calls = []
         self.model = "scripted"
+
+    def chat_tools(self, messages, tools, extra_body=None, on_progress=None):
+        """Prepared item: {"content": str, "tool_calls": [{"name": ..., "arguments": {...}}]}."""
+        self.calls.append(OrderedDict([("name", "chat_tools"), ("messages", list(messages)), ("tools", tools)]))
+        if not self.responses:
+            raise LLMError("ScriptedLLM: no responses left")
+        item = self.responses.pop(0)
+        if isinstance(item, Exception):
+            raise item
+        if callable(item):
+            item = item(messages)
+        message = {"role": "assistant", "content": item.get("content")}
+        calls = []
+        for i, call in enumerate(item.get("tool_calls") or []):
+            calls.append({"id": "call_%d_%d" % (len(self.calls), i), "type": "function",
+                          "function": {"name": call["name"],
+                                       "arguments": json.dumps(call.get("arguments") or {}, ensure_ascii=False)}})
+        if calls:
+            message["tool_calls"] = calls
+        return message, OrderedDict([("model", "scripted"), ("elapsed_s", 0.0)])
 
     def call_tool(self, messages, name, description, parameters, extra_body=None, on_progress=None):
         self.calls.append(OrderedDict([("name", name), ("messages", messages), ("parameters", parameters)]))
