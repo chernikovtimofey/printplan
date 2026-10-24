@@ -183,6 +183,7 @@ function summarizeCall(name, args) {
     case "set_material": return args.material_id;
     case "set_printing_mode": return MODE_NAMES[args.mode] || args.mode;
     case "load_model": return (args.path || "").split(/[\\/]/).pop();
+    case "model_from_photos": return `${(args.photo_paths || []).length || "прикреплённые"} фото, ${args.size_mm} мм`;
     case "rotate_object": return `${args.axis} ${args.angle_deg}°`;
     case "apply_orientation": return args.orientation_id || "";
     case "plan_print": return (args.task || "").slice(0, 120);
@@ -198,6 +199,8 @@ function summarizeResult(name, result) {
   if (result === null || result === undefined) return "";
   switch (name) {
     case "load_model": return (result.loaded || []).map((o) => `${o.name} ${(o.size_mm || []).join("×")} мм`).join("; ");
+    case "model_from_photos": return (result.loaded || []).map((o) => `${o.name} ${(o.size_mm || []).join("×")} мм`)
+      .join("; ") + `, ${Math.round((result.triangles || 0) / 1000)} тыс. треугольников`;
     case "set_settings": {
       const n = Object.keys(result.applied || {}).length;
       const r = Object.keys(result.rejected || {}).length;
@@ -601,6 +604,7 @@ function openSettings() {
     : "не задан";
   form.output_dir.value = settings.output_dir || "";
   form.port.value = settings.port || "";
+  form.photo3d_url.value = settings.photo3d_url || "";
   $("#mcp-hint").textContent = `MCP-сервер: POST ${location.origin}/mcp (JSON-RPC 2.0)`;
   $("#settings").hidden = false;
   form.api_key.focus();
@@ -613,6 +617,7 @@ async function saveSettings(e) {
     base_url: form.base_url.value.trim(),
     model: form.model.value.trim(),
     output_dir: form.output_dir.value.trim(),
+    photo3d_url: form.photo3d_url.value.trim(),
   };
   if (form.api_key.value.trim()) body.api_key = form.api_key.value.trim();
   if (form.port.value) body.port = parseInt(form.port.value, 10);

@@ -1,4 +1,4 @@
-"""Plugin settings: LLM connection, server port, output folder.
+"""Plugin settings: LLM connection, server port, output folder, photo-to-3D service.
 
 Inside STE Slicer the values live in the application preferences
 (`ai_assistant/...`), so the API key is never stored in the sources; outside
@@ -11,12 +11,14 @@ from collections import OrderedDict
 from ..printplan.llm_client import DEFAULT_BASE_URL, DEFAULT_MODEL, LLMClient
 
 PREFIX = "ai_assistant/"
+DEFAULT_PHOTO3D_URL = "http://127.0.0.1:17600"  # services/photo3d; reach a remote one through a forwarded port
 DEFAULTS = OrderedDict([
     ("base_url", DEFAULT_BASE_URL),
     ("model", DEFAULT_MODEL),
     ("api_key", ""),
     ("port", 17530),
     ("output_dir", ""),
+    ("photo3d_url", DEFAULT_PHOTO3D_URL),
 ])
 
 
@@ -69,6 +71,9 @@ class Settings(object):
             os.makedirs(folder)
         return folder
 
+    def photo3d_url(self):
+        return (self.get("photo3d_url") or DEFAULT_PHOTO3D_URL).rstrip("/")
+
     def llm(self):
         """LLM client, or None when no API key is configured."""
         key = self.api_key()
@@ -87,6 +92,7 @@ class Settings(object):
         out["api_key_from_env"] = bool(not self.get("api_key") and key)
         out["port"] = self.port()
         out["output_dir"] = self.get("output_dir") or os.path.join(os.path.expanduser("~"), "STE-AI-Assistant")
+        out["photo3d_url"] = self.photo3d_url()
         return out
 
 

@@ -6,6 +6,7 @@ events, so the chat shows what the assistant changes — whether the call came
 from the agent, from an external MCP client or from `plan_print` applying a
 plan step by step.
 """
+import base64
 import os
 import re
 import threading
@@ -15,8 +16,9 @@ from collections import OrderedDict
 
 import numpy as np
 
-from ..printplan import pipeline
+from ..printplan import io_utils, pipeline
 from ..printplan.slicer_context import check_value, coerce_value
+from . import photo3d
 from .slicer_base import SlicerError
 
 MODES = ["classic", "cylindrical", "cylindrical_full"]
@@ -54,6 +56,7 @@ class SessionState(object):
 
     def __init__(self):
         self.images = []          # data URLs of photos attached in the current turn
+        self.photos = []          # last attached photos {"name", "data"}: kept for model_from_photos until new ones
         self.last_plan = None     # last pipeline result
         self.last_object_id = None
         self.lock = threading.RLock()
@@ -276,6 +279,71 @@ def _load_model(ctx, args):
     return OrderedDict([("loaded", objects)])
 
 
+PHOTO_MODEL_WARNING = ("Модель построена нейросетью по фото: форма приблизительная, точны пропорции и заданный "
+                       "наибольший размер; отверстия, резьба и тонкие стенки могли сгладиться или исчезнуть. "
+                       "Поэтому выбор режима и материала менее надёжен, чем по настоящей модели.")
+
+
+def _photos_for_generation(ctx, args):
+    paths = args.get("photo_paths") or []
+    if paths:
+        photos = []
+        for path in paths:
+            if not os.path.isfile(path):
+                raise ToolError("Файл фото не найден: %s" % path)
+            with open(path, "rb") as f:
+                photos.append({"name": os.path.basename(path), "data": f.read()})
+        return photos
+    with ctx.state.lock:
+        return list(ctx.state.photos)
+
+
+def _model_from_photos(ctx, args):
+    try:
+        size = float(args.get("size_mm"))
+    except (TypeError, ValueError):
+        size = 0.0
+    if not size > 0:
+        raise ToolError("Нужен наибольший размер детали в мм (size_mm): масштаб по фото не определить — "
+                        "спросите пользователя")
+    photos = _photos_for_generation(ctx, args)
+    if not photos:
+        raise ToolError("Нет фото детали: прикрепите к сообщению одно или несколько фото")
+    views = [str(v) for v in (args.get("views") or [])]
+    bad = [v for v in views if v not in photo3d.VIEWS]
+    if bad or len(set(views)) != len(views):
+        raise ToolError("views — разные ракурсы из %s, по одному на фото" % ", ".join(photo3d.VIEWS))
+    used = photos[:len(views) or photo3d.MAX_PHOTOS]
+    views = views[:len(used)] or list(photo3d.VIEWS[:len(used)])
+    try:
+        triangles, info = photo3d.Photo3DClient(ctx.settings.photo3d_url()).generate([p["data"] for p in used], views)
+    except photo3d.Photo3DError as e:
+        raise ToolError(str(e))
+    triangles = photo3d.scale_to_size(triangles, size)
+    stem = re.sub(r"[^\w\-. ]+", "_", os.path.splitext(used[0]["name"])[0], flags=re.U).strip() or "photo"
+    path = os.path.join(ctx.settings.output_dir(), stem + "_по_фото.stl")
+    io_utils.write_stl(path, triangles)
+    # Like an attached model, the generated one replaces the models on the bed.
+    for name, step_args in (("clear_scene", {}), ("load_model", {"path": path})):
+        if name == "clear_scene" and not ctx.slicer.list_objects():
+            continue
+        outcome = ctx.call(name, step_args)
+        if not outcome["ok"]:
+            raise ToolError(outcome["error"])
+    with ctx.state.lock:  # the photos also go to the LLM step of plan_print
+        ctx.state.images = [_data_url(p) for p in photos]
+    return OrderedDict([
+        ("loaded", outcome["result"]["loaded"]), ("path", path), ("size_mm", size),
+        ("photos", [p["name"] for p in used]), ("views", views), ("triangles", int(len(triangles))),
+        ("generation_s", info.get("seconds")), ("generator", info.get("model")), ("warning", PHOTO_MODEL_WARNING),
+    ])
+
+
+def _data_url(photo):
+    mime = "image/png" if photo["name"].lower().endswith(".png") else "image/jpeg"
+    return "data:%s;base64,%s" % (mime, base64.b64encode(photo["data"]).decode("ascii"))
+
+
 def _list_objects(ctx, args):
     return ctx.slicer.list_objects()
 
@@ -492,6 +560,16 @@ def build_registry():
                _schema([("name", {"type": "string"})], ["name"]), _save_profile))
     r.add(Tool("load_model", "Загрузка модели", "Загрузить файл модели (STL, OBJ, 3MF) на стол.",
                _schema([("path", {"type": "string"})], ["path"]), _load_model))
+    r.add(Tool("model_from_photos", "Модель по фото",
+               "Построить 3D-модель детали по фото (1–4 ракурса), когда файла модели нет, и поставить её на стол "
+               "вместо прежних моделей. size_mm — наибольший габарит детали в мм, обязателен: по фото масштаб не "
+               "определить. views — ракурсы фото по порядку (front, left, back, right; по умолчанию в этом порядке). "
+               "Берутся фото, прикреплённые в чате, или photo_paths — пути к файлам. Генерация занимает до "
+               "нескольких минут, форма приблизительная.",
+               _schema([("size_mm", {"type": "number"}),
+                        ("views", {"type": "array", "items": {"type": "string", "enum": list(photo3d.VIEWS)}}),
+                        ("photo_paths", {"type": "array", "items": {"type": "string"}})], ["size_mm"]),
+               _model_from_photos))
     r.add(Tool("list_objects", "Модели на столе", "Список моделей на столе: id, имя, габариты (мм).", _schema(),
                _list_objects))
     r.add(Tool("get_object_info", "Габариты модели", "Габариты и положение модели (мм, ось Z вверх).",

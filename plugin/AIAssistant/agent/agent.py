@@ -31,7 +31,7 @@ SYSTEM_PROMPT = """Ты — ИИ-ассистент слайсера STE Slicer 
 
 Как работать:
 1. Если на столе есть модель и пользователь описал задачу печати (назначение детали, условия работы, требования, материал и т. п.), вызови plan_print и передай в task полный текст задания. Если задание пришло в нескольких сообщениях или во вложенном файле, объедини всё в task. plan_print сам выбирает режим, профиль, материал, настройки и ориентацию, применяет их и нарезает модель.
-2. Если модели нет — попроси прикрепить STL, OBJ или 3MF. Если задачи нет — коротко спроси, для чего деталь и какие к ней требования.
+2. Если файла модели нет, а пользователь прикрепил фото детали, построй модель по фото инструментом model_from_photos. В size_mm передай наибольший габарит детали в мм, который пользователь назвал в сообщении или ТЗ; не оценивай размер по фото. Если размера нет, спроси его и ничего не вызывай. После этого вызови plan_print с полным заданием и предупреди, что модель построена по фото и приблизительная. Если на столе уже есть модель, а пришли только фото, по тексту реши: это новая деталь (model_from_photos) или фото той же детали (просто учти их). Если нет ни модели, ни фото — попроси прикрепить STL, OBJ, 3MF или фото детали. Если задачи нет — коротко спроси, для чего деталь и какие к ней требования.
 3. После plan_print кратко объясни решение по данным результата: режим и почему, ориентация, материал, профиль и ключевые настройки, главные риски, время печати и расход материала. Передай пользователю questions_to_user и material_conflicts, если они есть. Карточка плана со всеми настройками уже показана в чате, не перечисляй их все.
 4. Точечные изменения («заполнение 30 %», «поверни на бок», «смени материал») делай соответствующими инструментами, затем вызови slice и сообщи новое время печати и расход.
 5. Сохраняй G-code (export_gcode) и проект (save_project), когда пользователь просит, и называй путь к файлу.
@@ -72,8 +72,11 @@ class Session(object):
             raise BusyError("Ассистент ещё отвечает")
         self.history = []
         self._notes = []
+        self._photo_task = ""
+        self._size_texts = ()
         with self.context.state.lock:
             self.context.state.images = []
+            self.context.state.photos = []
             self.context.state.last_plan = None
         self.events.emit("reset")
 
@@ -159,11 +162,22 @@ class Session(object):
                 loaded.extend(outcome["result"]["loaded"])
             else:
                 notes.append("Модель %s не загружена: %s" % (f["name"], outcome["error"]))
-        images = [f["data_url"] for f in files if f["kind"] == "image"]
+        photos = [f for f in files if f["kind"] == "image"]
+        images = [f["data_url"] for f in photos]
         with self.context.state.lock:
             self.context.state.images = images
+            if photos:  # kept for model_from_photos until new photos come (the size may follow later)
+                self.context.state.photos = [{"name": f["name"], "data": f["data"]} for f in photos]
+        self._turn_photos, self._turn_models = bool(photos), bool(models)
+        if photos and not models:
+            on_bed = self.context.slicer.list_objects()
+            notes.append("Прикреплены фото без файла модели: %s; %s" % (
+                ", ".join(f["name"] for f in photos),
+                "на столе уже есть модель «%s»" % on_bed[0]["name"] if on_bed else "на столе нет моделей"))
 
         full_text = "\n\n".join([t for t in [text.strip()] + task_texts if t])
+        # Where a part size may come from: a short reply may be a bare number ("120"), longer texts need a unit.
+        self._size_texts = list(self._size_texts) + [(text, len(text.strip()) <= 40)] + [(t, False) for t in task_texts]
         if loaded:
             notes.append("На стол загружены модели: %s" % ", ".join(
                 "id=%s «%s», габариты %s мм" % (o["id"], o["name"], o.get("size_mm")) for o in loaded))
@@ -210,7 +224,11 @@ class Session(object):
                 function = call.get("function") or {}
                 name = function.get("name")
                 args = self._parse_args(function.get("arguments"))
-                outcome = self.registry.call(name, args, self.context, source="agent", call_id=call.get("id"))
+                refusal = self._check_call(name, args)
+                if refusal:  # not run: the model gets the reason instead of a result
+                    outcome = OrderedDict([("ok", False), ("error", refusal)])
+                else:
+                    outcome = self.registry.call(name, args, self.context, source="agent", call_id=call.get("id"))
                 if name == "plan_print":
                     self._planned_this_turn = True
                 self.history.append({"role": "tool", "tool_call_id": call.get("id"),
@@ -220,9 +238,15 @@ class Session(object):
     def _offline_turn(self, text, reason):
         """Deterministic behaviour without the LLM."""
         objects = self.context.slicer.list_objects()
+        with self.context.state.lock:
+            have_photos = bool(self.context.state.photos)
+        if have_photos and not self._turn_models and (self._turn_photos or not objects):
+            if self._offline_photo_model(text, reason, bed_empty=not objects):
+                return
+            objects = self.context.slicer.list_objects()
         if not objects:
-            self.events.emit("assistant", text="Прикрепите модель (STL, OBJ или 3MF) и опишите задачу печати. "
-                                               "(%s)" % reason)
+            self.events.emit("assistant", text="Прикрепите модель (STL, OBJ или 3MF) или фото детали и опишите "
+                                               "задачу печати. (%s)" % reason)
             return
         if not text.strip():
             self.events.emit("assistant", text="Модель на столе. Опишите, для чего деталь и какие к ней требования. "
@@ -235,8 +259,53 @@ class Session(object):
             return
         self.events.emit("assistant", text=offline_reply(outcome["result"], reason))
 
+    def _check_call(self, name, args):
+        """The model tends to guess a part size from the photo; the size must come from the user."""
+        if name != "model_from_photos" or args.get("photo_paths"):
+            return None
+        try:
+            size = float(args.get("size_mm"))
+        except (TypeError, ValueError):
+            return None  # the tool itself explains that the size is required
+        if size_mentioned(size, self._size_texts):
+            return None
+        return ("Размер %g мм не назван пользователем ни в сообщениях, ни в ТЗ, а по фото масштаб не определить. "
+                "Не вызывай model_from_photos: спроси у пользователя наибольший размер детали в мм." % size)
+
+    def _offline_photo_model(self, text, reason, bed_empty):
+        """Photos without a model file: build the model from them, then plan. Returns True when
+        the turn is answered; False lets the photos count as extra photos of the model on the bed."""
+        task = "\n\n".join(t for t in (self._photo_task, text.strip()) if t)
+        size = size_from_text(task)
+        if size is None:
+            if not bed_empty:
+                return False
+            self._photo_task = task
+            self.events.emit("assistant", text="Построю модель по фото, но масштаб по фото не определить. Напишите "
+                                               "наибольший размер детали в мм (например, «диаметр 120 мм»). "
+                                               "(%s)" % reason)
+            return True
+        self._photo_task = ""
+        outcome = self.registry.call("model_from_photos", {"size_mm": size}, self.context, source="agent")
+        if not outcome["ok"]:
+            self.events.emit("assistant", text="Не удалось построить модель по фото: %s" % outcome["error"])
+            return True
+        plan = self.registry.call("plan_print", {"task": task}, self.context, source="agent")
+        self._planned_this_turn = True
+        note = ("Модель построена по фото, наибольший размер %g мм взят из текста. %s"
+                % (size, outcome["result"]["warning"]))
+        if not plan["ok"]:
+            self.events.emit("assistant", text="%s\n\nНе удалось построить план: %s" % (note, plan["error"]))
+        else:
+            self.events.emit("assistant", text=note + "\n\n" + offline_reply(plan["result"], reason))
+        return True
+
     # ------------------------------------------------------------------ helpers
     _planned_this_turn = False
+    _turn_photos = False
+    _turn_models = False
+    _photo_task = ""
+    _size_texts = ()
     _turn_task = ""
 
     def _on_progress(self, progress):
@@ -293,7 +362,7 @@ class Session(object):
                 continue
             if kind == "image":
                 mime = "image/png" if ext == ".png" else "image/jpeg"
-                files.append({"name": name, "kind": "image",
+                files.append({"name": name, "kind": "image", "data": data,
                               "data_url": "data:%s;base64,%s" % (mime, base64.b64encode(data).decode("ascii"))})
                 continue
             if folder is None:
@@ -309,6 +378,35 @@ class Session(object):
         if not os.path.isdir(base):
             os.makedirs(base)
         return tempfile.mkdtemp(prefix=time.strftime("%Y%m%d-%H%M%S-"), dir=base)
+
+
+_SIZE_RE = re.compile(r"(\d+(?:[.,]\d+)?)\s*(мм|mm|см|cm)(?![a-zа-яё])", re.I | re.U)
+
+
+def size_from_text(text):
+    """Largest size with a unit (мм/см) in the text, in mm — the offline guess of the part size."""
+    sizes = []
+    for number, unit in _SIZE_RE.findall(text or ""):
+        value = float(number.replace(",", "."))
+        sizes.append(value * 10.0 if unit.lower() in ("см", "cm") else value)
+    sizes = [v for v in sizes if 1.0 <= v <= 2000.0]
+    return max(sizes) if sizes else None
+
+
+_NUMBER_RE = re.compile(r"(\d+(?:[.,]\d+)?)\s*(мм|mm|см|cm|м|m)?(?![a-zа-яё])", re.I | re.U)
+_UNIT_MM = {"мм": 1.0, "mm": 1.0, "см": 10.0, "cm": 10.0, "м": 1000.0, "m": 1000.0}
+
+
+def size_mentioned(size_mm, texts):
+    """True when one of the texts names size_mm (in мм, см or м; a bare number only where allowed)."""
+    for text, bare_ok in texts:
+        for number, unit in _NUMBER_RE.findall(text or ""):
+            if not unit and not bare_ok:
+                continue
+            value = float(number.replace(",", ".")) * _UNIT_MM.get(unit.lower(), 1.0)
+            if abs(value - size_mm) <= max(0.01 * size_mm, 0.05):
+                return True
+    return False
 
 
 def offline_reply(summary, reason):
